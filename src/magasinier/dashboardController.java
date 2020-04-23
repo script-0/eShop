@@ -5,6 +5,7 @@
  */
 package magasinier;
 
+import Utils.Internationalization;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
@@ -12,7 +13,6 @@ import javafx.fxml.Initializable;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import java.io.IOException;
-import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.ObservableList;
@@ -26,9 +26,6 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import login.loginController;
 
@@ -69,40 +66,44 @@ public class dashboardController implements Initializable {
     private JFXComboBox<String> langue;
     
     ResourceBundle titres;
-    
-    Locale en = new Locale("en");
-    
-    Locale fr = new Locale("fr");    
-    
-    String lang = "En";
-    
-    @FXML
-    void languageChanged(){
-        loadResource(lang.equals("En")?"Fr":"En");
-    }
-    
+   
     public void loadResource(String language){
-        if(language.equalsIgnoreCase("Fr")){
-            titres = ResourceBundle.getBundle("resources/languages/admin/dashboard/dashboard",fr);
-            lang = "Fr";
-            langue.setValue("Francais");
-        }
-        else{
-            titres = ResourceBundle.getBundle("resources/languages/admin/dashboard/dashboard",en);
-            lang="En";langue.setValue("English");
-        }
+        titres =Internationalization.getBundle(language);
         setResource();
     }
     
     public void setResource(){
-        /* slogan.setText(titres.getString("SLOGAN"));
-        user.setText(titres.getString("USER"));
-        question.setText(titres.getString("QUESTION"));
-        langue.setPromptText(titres.getString("LANG"));
-        magasinier.setText(titres.getString("MAGASINIER"));
-        caissier.setText(titres.getString("CAISSIER"));
-        stats.setText(titres.getString("STATS"));
-        factures.setText(titres.getString("FACTURES"));*/
+        /************************************ A Compler ****************/
+        lien.setText(titres.getString("MAGASINIER"));
+        lien1.setText(titres.getString("DASHBOARD"));
+        username.setText(titres.getString("USER"));
+        dashboard.setText(titres.getString("DASHBOARD"));
+        produits.setText(titres.getString("PRODUITS"));
+        categories.setText(titres.getString("CATEGORY"));
+        
+        refreshFlow.setText(titres.getString("REFRESH"));   
+        
+        refreshSales.setText(titres.getString("REFRESH"));   
+        
+        refreshProportionsCategorie.setText(titres.getString("REFRESH"));   
+        
+        refreshTypeProduit.setText(titres.getString("REFRESH"));   
+        
+        flowGraph.setTitle(titres.getString("FLOW_GRAPH_TITLE"));
+        flowGraph.getXAxis().setLabel(titres.getString("FLOW_GRAPH_X"));
+        flowGraph.getYAxis().setLabel(titres.getString("FLOW_GRAPH_Y"));
+        
+         differenceChart.setName(titres.getString("DIFFERENT_CHART"));
+         entryChart.setName(titres.getString("ENTRY_CHART"));
+         exitChart.setName(titres.getString("EXIT_CHART"));
+         proportionsCategorie.setTitle(titres.getString("PROPORTIONS_CHART"));
+         typeProduitGraph.getYAxis().setLabel(titres.getString("TYPE_PRODUCTS_GRAPH_TITLE"));
+        typeProduitChart.setName(titres.getString("TYPE_PRODUCTS_Y"));
+        
+        salesGraph.getYAxis().setLabel(titres.getString("SALES_GRAPH_TITLE"));
+        salesChart.setName(titres.getString("SALES_GRAPH_TITLE"));
+        
+        
     }
 
     /************************************************/
@@ -112,30 +113,24 @@ public class dashboardController implements Initializable {
     }
 
     @FXML
-    void logOut(MouseEvent event) {
-       loadInterface(false,event);
+    void logOut() {
+       loadInterface(false);
     }
     
-    void loadInterface(boolean test,MouseEvent event){
+    void loadInterface(boolean test){
         try {
-             Stage tmp;
-             if(test){
-                 tmp=(Stage) ((JFXButton)event.getSource()).getScene().getWindow();
-             }else{
-                 tmp =(Stage) ((ImageView)event.getSource()).getScene().getWindow();
-             }
-             
+             Stage tmp=(Stage) lien.getScene().getWindow();  
              FXMLLoader loader=new FXMLLoader(getClass().getResource(test?"/magasinier/produits.fxml":"/login/login.fxml"));
              Scene newScene = new Scene(loader.load());
              if(test){
                  produitsController controller = loader.getController();
-                 controller.loadResource(lang);
+                 controller.loadResource(langue.getValue());
              }else{
                 loginController controller = loader.getController();
-                controller.loadResource(lang);
+                controller.loadResource(langue.getValue());
              }
              tmp.setScene(newScene);
-             //tmp.hide();
+             tmp.hide();
              tmp.show();
          } catch (IOException ex) {
              Logger.getLogger(loginController.class.getName()).log(Level.SEVERE, null, ex);
@@ -143,8 +138,8 @@ public class dashboardController implements Initializable {
     }
     
     @FXML
-    void produits(MouseEvent event) {
-        loadInterface(true,event);
+    void produits() {
+        loadInterface(true);
     }
     
     /**
@@ -154,8 +149,12 @@ public class dashboardController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        langue.getItems().addAll("Francais","English");
-        langue.setValue("English");
+        
+        titres = Internationalization.initLanguage(langue);
+        langue.valueProperty().addListener((observable, oldValue, newValue) -> {
+            loadResource(newValue);
+        });
+        
         chartPane.widthProperty().addListener((observable, oldValue, newValue) -> {
             chartPane.setFitToWidth(newValue.intValue() >1000);
         });
@@ -204,9 +203,9 @@ public class dashboardController implements Initializable {
     }
     
     void initFlowGraph(){
-        flowGraph.setTitle("Flow du stock");
-        flowGraph.getXAxis().setLabel("Semaine");
-        flowGraph.getYAxis().setLabel("nb Produits(x 100)");
+        flowGraph.setTitle(titres.getString("FLOW_GRAPH_TITLE"));
+        flowGraph.getXAxis().setLabel(titres.getString("FLOW_GRAPH_X"));
+        flowGraph.getYAxis().setLabel(titres.getString("FLOW_GRAPH_Y"));
 
         loadDifferenceData();
         flowGraph.getData().add(differenceChart);
@@ -219,7 +218,7 @@ public class dashboardController implements Initializable {
     }
     
     void loadDifferenceData(){
-            differenceChart.setName("etat");
+            differenceChart.setName(titres.getString("DIFFERENT_CHART"));
         /*// resultSet va contenir les jours et les differences du mois en cours
     		while(resultSet.next()){
     			differenceChart.getData.add(new XYChart.Data<Number, Number>(resultSet.getInt(),result.getDouble()));
@@ -236,7 +235,7 @@ public class dashboardController implements Initializable {
     }
     
     void loadEntryData(){
-        entryChart.setName("Entrées");
+        entryChart.setName(titres.getString("ENTRY_CHART"));
         /*// resultSet va contenir les jours et les entree du mois en cours
     		while(resultSet.next()){
     			entryChart.getData.add(new XYChart.Data<Number, Number>(resultSet.getInt(),result.getDouble()));
@@ -253,7 +252,7 @@ public class dashboardController implements Initializable {
     }  
         
     public void loadExitData(){
-        exitChart.setName("Sorties");
+        exitChart.setName(titres.getString("EXIT_CHART"));
         /*// resultSet va contenir les jours et les sortie du mois en cours
     		while(resultSet.next()){
     			exitChart.getData.add(new XYChart.Data<Number, Number>(resultSet.getInt(),result.getDouble()));
@@ -288,14 +287,14 @@ public class dashboardController implements Initializable {
     }
     
     void initProportionsCategorie(){
-         proportionsCategorie.setTitle("Proportions des Categories");
+         proportionsCategorie.setTitle(titres.getString("PROPORTIONS_CHART"));
          proportionsCategorieChartData = proportionsCategorie.getData();
                  
          loadProportionsCategorie();
     }
     
     @FXML
-    void refreshProportionsCategorie(ActionEvent event) {
+    void refreshProportionsCategorie() {
         proportionsCategorie.getData().clear();
         loadProportionsCategorie();
     }
@@ -328,8 +327,8 @@ public class dashboardController implements Initializable {
     }
     
     void initTypeProduit(){
-        typeProduitGraph.getYAxis().setLabel("Types de Produit");
-        typeProduitChart.setName("Types de Produit");
+        typeProduitGraph.getYAxis().setLabel(titres.getString("TYPE_PRODUCTS_GRAPH_TITLE"));
+        typeProduitChart.setName(titres.getString("TYPE_PRODUCTS_Y"));
 
         loadTypeProduitData();
         typeProduitGraph.getData().add(typeProduitChart);
@@ -355,8 +354,8 @@ public class dashboardController implements Initializable {
     private JFXButton refreshSales;
     
     void initSales(){
-        salesGraph.getYAxis().setLabel("Somme gagnee($ x 5000)");
-        salesChart.setName("Ventes par Categorie");
+        salesGraph.getYAxis().setLabel(titres.getString("SALES_GRAPH_TITLE"));
+        salesChart.setName(titres.getString("SALES_GRAPH_TITLE"));
 
         loadSalesData();
         salesGraph.getData().add(salesChart);

@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="635.0" prefWidth="900.0" styleClass="rootPane" stylesheets="@../resources/style/magasinier-Produit.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="magasinier.produitsController">
+<AnchorPane prefHeight="638.0" prefWidth="927.0" styleClass="rootPane" stylesheets="@../resources/style/magasinier-Produit.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="magasinier.produitsController">
    <children>
       <Pane layoutX="40.0" layoutY="25.0" prefHeight="520.0" prefWidth="705.0" styleClass="rootPane2" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="25.0" />
       <HBox alignment="CENTER_LEFT" layoutX="245.0" layoutY="76.0" prefHeight="22.0" prefWidth="498.0" styleClass="chemin" AnchorPane.leftAnchor="245.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="70.0">
@@ -140,7 +140,7 @@
             </JFXButton>
          </children>
       </HBox>
-      <JFXComboBox fx:id="langue" layoutX="270.0" layoutY="36.0" onAction="#languageChanged" prefHeight="25.0" prefWidth="94.0" promptText="Language" unFocusColor="WHITE" AnchorPane.leftAnchor="270.0" AnchorPane.topAnchor="35.0">
+      <JFXComboBox fx:id="langue" layoutX="270.0" layoutY="36.0" prefHeight="25.0" prefWidth="94.0" promptText="Language" unFocusColor="WHITE" AnchorPane.leftAnchor="270.0" AnchorPane.topAnchor="35.0">
          <opaqueInsets>
             <Insets />
          </opaqueInsets>
@@ -221,7 +221,7 @@
             </ImageView>
          </graphic>
       </JFXButton>
-      <JFXButton fx:id="modify" layoutX="102.0" layoutY="175.0" onAction="#modify" styleClass="b" text="Modifier">
+      <JFXButton fx:id="modify" layoutX="111.0" layoutY="175.0" onAction="#modify" styleClass="b" text="Modifier">
          <graphic>
             <ImageView fitHeight="22.0" fitWidth="29.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -233,7 +233,7 @@
             </ImageView>
          </graphic>
       </JFXButton>
-      <JFXButton fx:id="delete" layoutX="290.0" layoutY="175.0" onAction="#delete" styleClass="bdel" text="Supprimer" AnchorPane.leftAnchor="195.0" AnchorPane.topAnchor="175.0">
+      <JFXButton fx:id="delete" layoutX="211.0" layoutY="175.0" onAction="#delete" styleClass="bdel" text="Supprimer" AnchorPane.leftAnchor="211.0" AnchorPane.topAnchor="175.0">
          <graphic>
             <ImageView fitHeight="22.0" fitWidth="29.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
                <image>

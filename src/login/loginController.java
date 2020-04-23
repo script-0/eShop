@@ -5,6 +5,7 @@
  */
 package login;
 
+import Utils.Internationalization;
 import magasinier.dashboardController;
 import caissier.facturationController;
 import com.jfoenix.controls.JFXButton;
@@ -13,13 +14,11 @@ import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
-import controllerUtils.controllerUtils;
 import java.io.IOException;
 import java.net.URL;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -59,12 +58,6 @@ public class loginController implements Initializable {
     private Label slogan;
     
     ResourceBundle titres;
-    
-    Locale en = new Locale("en");
-    
-    Locale fr = new Locale("fr");    
-    
-    String lang = "En";
 
     @FXML
     void logIn(ActionEvent event) {
@@ -75,10 +68,10 @@ public class loginController implements Initializable {
              Scene newScene = new Scene(loader.load());
              if(test){
                  dashboardController controller = loader.getController();
-                 controller.loadResource(lang);
+                 controller.loadResource(langue.getValue());
              }else{
                  facturationController controller = loader.getController();
-                 controller.loadResource(lang);
+                 controller.loadResource(langue.getValue());
              }
              
              tmp.setScene(newScene);
@@ -99,28 +92,10 @@ public class loginController implements Initializable {
     void passwordForget(ActionEvent event) {
         
     }
-
-    @FXML
-    void languageChanged(ActionEvent event) {
-        loadResource(lang.equals("En")?"Fr":"En");
-    }
     
     public void loadResource(String language){
-        if(language.equalsIgnoreCase("Fr")){
-            titres = ResourceBundle.getBundle("resources/languages/login/login",fr);
-            lang = "Fr";
-        }
-        else{
-            titres = ResourceBundle.getBundle("resources/languages/login/login",en);
-            lang="En";
-        }
+        titres =Internationalization.getBundle(language);
         setResource();
-    
-}
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        langue.getItems().addAll("Francais","English");
-        langue.setValue("English");
     }
     
     public void setResource(){
@@ -133,5 +108,14 @@ public class loginController implements Initializable {
         asAdmin.setText(titres.getString("LOGINASADMIN"));
         login.setText(titres.getString("LOG"));
     }    
+    
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+       
+        titres = Internationalization.initLanguage(langue);
+        langue.valueProperty().addListener((observable, oldValue, newValue) -> {
+            loadResource(newValue);
+        });
+    }
     
 }

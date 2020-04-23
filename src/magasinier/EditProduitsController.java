@@ -7,10 +7,7 @@ package magasinier;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 
@@ -20,7 +17,6 @@ import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXToggleButton;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
@@ -81,12 +77,12 @@ public class EditProduitsController implements Initializable {
     private JFXComboBox<String> categorie;
 
     @FXML
-    void annuler(MouseEvent event) {
-        close(event);
+    void annuler() {
+        close();
     }
     
     @FXML
-    void valider(ActionEvent event) {
+    void valider() {
 
     }   
     
@@ -95,8 +91,8 @@ public class EditProduitsController implements Initializable {
         // TODO
     }    
     
-    @FXML void close(MouseEvent e){
-        Stage tmp = (Stage) ((ImageView)e.getSource()).getScene().getWindow();
+    @FXML void close(){
+        Stage tmp = (Stage)lien.getScene().getWindow();
         tmp.close();
     }
 }

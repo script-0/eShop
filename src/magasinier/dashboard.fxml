@@ -26,40 +26,32 @@
       <Pane layoutX="40.0" layoutY="25.0" prefHeight="520.0" prefWidth="705.0" styleClass="rootPane2" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="25.0" />
       <HBox alignment="CENTER_LEFT" layoutX="245.0" layoutY="76.0" prefHeight="22.0" prefWidth="498.0" styleClass="chemin" AnchorPane.leftAnchor="245.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="70.0">
          <children>
-            <Pane>
-               <children>
-                  <Label fx:id="lien" prefHeight="20.0" prefWidth="72.0" text="Magasinier" textFill="#2196f3">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </Label>
-                  <ImageView fitHeight="21.0" fitWidth="20.0" layoutX="69.65709686279297" layoutY="0.3550868034362793" preserveRatio="true" rotate="-2.0">
-                     <image>
-                        <Image url="@../resources/img/chevron.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </Pane>
-            <Pane layoutX="15.0" layoutY="10.0">
-               <children>
-                  <Label fx:id="lien1" prefHeight="20.0" prefWidth="72.0" text="Dashboard" textFill="#2196f3">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </Label>
-                  <ImageView fitHeight="21.0" fitWidth="20.0" layoutX="69.65709686279297" layoutY="0.3550868034362793" preserveRatio="true" rotate="-2.0">
-                     <image>
-                        <Image url="@../resources/img/chevron.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </Pane>
+            <Label fx:id="lien" text="Magasinier" textFill="#2196f3">
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Label>
+            <ImageView fitHeight="21.0" fitWidth="20.0" preserveRatio="true" rotate="-2.0">
+               <image>
+                  <Image url="@../resources/img/chevron.png" />
+               </image>
+            </ImageView>
+            <Label fx:id="lien1" text="Dashboard" textFill="#2196f3">
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Label>
+            <ImageView fitHeight="21.0" fitWidth="20.0" preserveRatio="true" rotate="-2.0">
+               <image>
+                  <Image url="@../resources/img/chevron.png" />
+               </image>
+            </ImageView>
          </children>
          <padding>
             <Insets left="5.0" />
@@ -241,7 +233,7 @@
             </VBox>
          </content>
       </ScrollPane>
-      <JFXComboBox fx:id="langue" layoutX="270.0" layoutY="36.0" onAction="#languageChanged" prefHeight="25.0" prefWidth="94.0" promptText="Language" unFocusColor="WHITE" AnchorPane.leftAnchor="270.0" AnchorPane.topAnchor="35.0">
+      <JFXComboBox fx:id="langue" layoutX="270.0" layoutY="36.0" prefHeight="25.0" prefWidth="94.0" promptText="Language" unFocusColor="WHITE" AnchorPane.leftAnchor="270.0" AnchorPane.topAnchor="35.0">
          <opaqueInsets>
             <Insets />
          </opaqueInsets>

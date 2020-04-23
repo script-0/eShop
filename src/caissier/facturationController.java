@@ -5,6 +5,7 @@
  */
 package caissier;
 
+import Utils.Internationalization;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
@@ -193,24 +194,16 @@ public class facturationController implements Initializable {
     }
 
     @FXML
-    void facturation(ActionEvent event) {
-
-    }
-
-    @FXML
-    void logOut(MouseEvent event) {
+    void logOut() {
         try {
-             Stage tmpStage = (Stage) ((Pane)event.getSource()).getScene().getWindow();
+             Stage tmpStage = (Stage)lien.getScene().getWindow();
              FXMLLoader loader=new FXMLLoader(getClass().getResource("/login/login.fxml"));
              Scene newScene = new Scene(loader.load());
              loginController controller = loader.getController();
-             controller.loadResource(lang);
+             controller.loadResource(langue.getValue());
+             tmpStage.hide();
              tmpStage.setScene(newScene);
-             //tmp.setMaximized(true);
-            /* tmp.sizeToScene();
-             tmp.centerOnScreen();*/
-             tmpStage.setMaximized(false);
-             tmpStage.setMaximized(true);
+             tmpStage.show();
          } catch (IOException ex) {
              Logger.getLogger(facturationController.class.getName()).log(Level.SEVERE, null, ex);
          }
@@ -228,39 +221,13 @@ public class facturationController implements Initializable {
 
     ResourceBundle titres;
     
-    Locale en = new Locale("en");
-    
-    Locale fr = new Locale("fr");    
-    
-    String lang = "En";
-    
-    @FXML
-    void languageChanged(){
-        loadResource(lang.equals("En")?"Fr":"En");
-    }
-    
     public void loadResource(String language){
-        if(language.equalsIgnoreCase("Fr")){
-            titres = ResourceBundle.getBundle("resources/languages/admin/dashboard/dashboard",fr);
-            lang = "Fr";
-            langue.setValue("Francais");
-        }
-        else{
-            titres = ResourceBundle.getBundle("resources/languages/admin/dashboard/dashboard",en);
-            lang="En";langue.setValue("English");
-        }
+        titres =Internationalization.getBundle(language);
         setResource();
     }
     
     public void setResource(){
-        /* slogan.setText(titres.getString("SLOGAN"));
-        user.setText(titres.getString("USER"));
-        question.setText(titres.getString("QUESTION"));
-        langue.setPromptText(titres.getString("LANG"));
-        magasinier.setText(titres.getString("MAGASINIER"));
-        caissier.setText(titres.getString("CAISSIER"));
-        stats.setText(titres.getString("STATS"));
-        factures.setText(titres.getString("FACTURES"));*/
+        /*********************** ***********A Faire /*****************************/
     }
      
     void buildReliquat(){
@@ -299,7 +266,10 @@ public class facturationController implements Initializable {
            buildReliquat();
         });
         
-        initializeLanguage();
+        titres = Internationalization.initLanguage(langue);
+        langue.valueProperty().addListener((observable, oldValue, newValue) -> {
+            loadResource(newValue);
+        });
         
         initializeTableView();
         

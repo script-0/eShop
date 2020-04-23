@@ -5,20 +5,18 @@
  */
 package magasinier;
 
+import Utils.Internationalization;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
-import controllerUtils.controllerUtils;
+import Utils.controllerUtils;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.animation.FadeTransition;
-import javafx.animation.ScaleTransition;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -38,8 +36,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import javafx.util.Duration;
 import login.loginController;
 
 /**
@@ -270,7 +266,7 @@ public class produitsController implements Initializable {
              Scene newScene = new Scene(pane);
              tmp.setScene(newScene);             
              tmp.setWidth(488);
-             tmp.setHeight(5551);
+             tmp.setHeight(555);
              tmp.setResizable(false);
              
              tmp.showAndWait();
@@ -333,32 +329,28 @@ public class produitsController implements Initializable {
     }
 
     @FXML
-    void logOut(MouseEvent event) {
-        loadInterface(false,event);
+    void logOut() {
+        loadInterface(false);
     }
 
     @FXML
-    void dashboard(MouseEvent event) {
-        loadInterface(true,event);
+    void dashboard() {
+        loadInterface(true);
     }
 
-    void loadInterface(boolean test,MouseEvent event){
+    void loadInterface(boolean test){
         try {
-             Stage tmp = (Stage) ((JFXButton)event.getSource()).getScene().getWindow();
+             Stage tmp = (Stage) lien.getScene().getWindow();
              FXMLLoader loader=new FXMLLoader(getClass().getResource(test?"/magasinier/dashboard.fxml":"/login/login.fxml"));
              Scene newScene = new Scene(loader.load());
              if(test){
                  dashboardController controller = loader.getController();
-                 controller.loadResource(lang);
+                 controller.loadResource(langue.getValue());
              }else{
                 loginController controller = loader.getController();
-                controller.loadResource(lang);
+                controller.loadResource(langue.getValue());
              }
-             
-             
              tmp.setScene(newScene);
-             tmp.setMaximized(false);
-             tmp.setMaximized(true);
          } catch (IOException ex) {
              Logger.getLogger(loginController.class.getName()).log(Level.SEVERE, null, ex);
          }
@@ -379,41 +371,15 @@ public class produitsController implements Initializable {
     @FXML
     private JFXComboBox<String> langue;
     
-    ResourceBundle titres;
-    
-    Locale en = new Locale("en");
-    
-    Locale fr = new Locale("fr");    
-    
-    String lang = "En";
-    
-    @FXML
-    void languageChanged(){
-        loadResource(lang.equals("En")?"Fr":"En");
-    }
+    ResourceBundle titres;  
     
     public void loadResource(String language){
-        if(language.equalsIgnoreCase("Fr")){
-            titres = ResourceBundle.getBundle("resources/languages/admin/dashboard/dashboard",fr);
-            lang = "Fr";
-            langue.setValue("Francais");
-        }
-        else{
-            titres = ResourceBundle.getBundle("resources/languages/admin/dashboard/dashboard",en);
-            lang="En";langue.setValue("English");
-        }
-        setResource();
+       titres =Internationalization.getBundle(language);
+       setResource();
     }
     
     public void setResource(){
-        /* slogan.setText(titres.getString("SLOGAN"));
-        user.setText(titres.getString("USER"));
-        question.setText(titres.getString("QUESTION"));
-        langue.setPromptText(titres.getString("LANG"));
-        magasinier.setText(titres.getString("MAGASINIER"));
-        caissier.setText(titres.getString("CAISSIER"));
-        stats.setText(titres.getString("STATS"));
-        factures.setText(titres.getString("FACTURES"));*/
+        /* ******** A Completer *************/
     }
 
     /************************************************/
@@ -425,8 +391,10 @@ public class produitsController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        langue.getItems().addAll("Francais","English");
-        langue.setValue("English");
+        Internationalization.initLanguage(langue);
+        langue.valueProperty().addListener((observable, oldValue, newValue) -> {
+            loadResource(newValue);
+        });
         initSearch();
         initializeTableView();
     }    

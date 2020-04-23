@@ -33,9 +33,9 @@
                         <DropShadow />
                      </effect>
                   </ImageView>
-                  <Pane layoutX="188.0" layoutY="43.0" prefHeight="24.0" prefWidth="463.0" styleClass="chemin">
+                  <HBox layoutX="188.0" layoutY="43.0" prefHeight="20.0" prefWidth="458.0" styleClass="chemin">
                      <children>
-                        <Label layoutX="9.0" layoutY="2.0" prefHeight="20.0" prefWidth="72.0" text="Dashboard" textFill="#2196f3">
+                        <Label fx:id="lien" prefHeight="20.0" prefWidth="72.0" text="Dashboard" textFill="#2196f3">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -43,16 +43,19 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Label>
-                        <ImageView fitHeight="21.0" fitWidth="20.0" layoutX="73.0" layoutY="2.0" preserveRatio="true">
+                        <ImageView fitHeight="21.0" fitWidth="20.0" preserveRatio="true">
                            <image>
                               <Image url="@../resources/img/chevron.png" />
                            </image>
                         </ImageView>
                      </children>
-                  </Pane>
+                     <padding>
+                        <Insets left="5.0" />
+                     </padding>
+                  </HBox>
                   <Pane layoutX="607.0" layoutY="3.0" onMouseClicked="#logOut">
                      <children>
-                        <ImageView fitHeight="37.0" fitWidth="36.0" layoutY="2.0" mouseTransparent="true" preserveRatio="true">
+                        <ImageView fitHeight="37.0" fitWidth="36.0" layoutY="2.0" mouseTransparent="true" onMouseClicked="#logOut" preserveRatio="true">
                            <image>
                               <Image url="@../resources/img/shutdown.png" />
                            </image>
@@ -170,7 +173,7 @@
                   <DropShadow />
                </effect>
             </Pane>
-            <JFXComboBox fx:id="langue" labelFloat="true" layoutX="293.0" layoutY="48.0" onAction="#languageChanged" prefHeight="25.0" prefWidth="94.0" promptText="Language" unFocusColor="WHITE">
+            <JFXComboBox fx:id="langue" labelFloat="true" layoutX="293.0" layoutY="48.0" prefHeight="25.0" prefWidth="94.0" promptText="Language" unFocusColor="WHITE">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controllerUtils;
+package Utils;
 
 import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
@@ -15,7 +15,8 @@ import javafx.util.Duration;
  * @author Isaac
  */
 public class controllerUtils{
-    public void launchInterface(String path){
+    
+     public void launchInterface(String path){
         
     }
     
@@ -41,6 +42,5 @@ public class controllerUtils{
 	ft.play();	
     
     }
-    
 }
 

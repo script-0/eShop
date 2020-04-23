@@ -110,7 +110,7 @@
       <Separator opacity="0.46" prefWidth="200.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="135.0" />
       <HBox alignment="CENTER" layoutY="71.0" spacing="80.0" style="-fx-alignment: center;" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="120.0">
          <children>
-            <JFXButton fx:id="facturation" onAction="#facturation" ripplerFill="#2196f3" styleClass="bSelected" text="Facturation">
+            <JFXButton fx:id="facturation" ripplerFill="#2196f3" styleClass="bSelected" text="Facturation">
                <font>
                   <Font size="15.0" />
                </font>
@@ -283,7 +283,7 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
-      <JFXComboBox fx:id="langue" layoutX="303.0" layoutY="38.0" onAction="#languageChanged" prefHeight="25.0" prefWidth="94.0" promptText="Language" unFocusColor="WHITE">
+      <JFXComboBox fx:id="langue" layoutX="303.0" layoutY="38.0" prefHeight="25.0" prefWidth="94.0" promptText="Language" unFocusColor="WHITE">
          <opaqueInsets>
             <Insets />
          </opaqueInsets>

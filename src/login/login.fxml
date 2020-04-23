@@ -71,7 +71,7 @@
                         </ImageView>
                      </graphic>
                   </JFXButton>
-                  <JFXComboBox fx:id="langue" layoutX="22.0" layoutY="146.0" onAction="#languageChanged" prefHeight="25.0" prefWidth="94.0" promptText="Language" unFocusColor="WHITE">
+                  <JFXComboBox fx:id="langue" layoutX="22.0" layoutY="146.0" prefHeight="25.0" prefWidth="94.0" promptText="Language" unFocusColor="WHITE">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets></JFXComboBox>
