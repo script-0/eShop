@@ -5,18 +5,20 @@
  */
 package magasinier;
 
-import caissier.facturationController;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
+import controllerUtils.controllerUtils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.animation.FadeTransition;
+import javafx.animation.ScaleTransition;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -34,7 +36,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.util.Duration;
 import login.loginController;
 
 /**
@@ -255,6 +260,25 @@ public class produitsController implements Initializable {
         
     }
     
+    @FXML void tableViewClicked(MouseEvent e){
+         try {
+             Stage tmp = new Stage();
+             //tmp.initStyle(StageStyle.TRANSPARENT);
+             tmp.initModality(Modality.APPLICATION_MODAL);
+             FXMLLoader loader=new FXMLLoader(getClass().getResource("/magasinier/editProduits.fxml"));
+             Pane pane = (Pane)loader.load();
+             Scene newScene = new Scene(pane);
+             tmp.setScene(newScene);             
+             tmp.setWidth(528);
+             tmp.setHeight(525);
+             tmp.setResizable(false);
+             
+             tmp.showAndWait();
+             controllerUtils.launchTransition(pane);
+         } catch (IOException ex) {
+             Logger.getLogger(produitsController.class.getName()).log(Level.SEVERE, null, ex);
+         }
+    }
     
  /* *************************************************************** */ 
     

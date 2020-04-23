@@ -11,6 +11,7 @@ and open the template in the editor.
 *{
     -fx-first-color:rgb(22,162,160);
     -fx-first-color-91-transparent:rgba( 22,162,160,0.91);
+    -fx-first-color-80-transparent:rgba( 22,162,160,0.8);
     -fx-first-color-5-transparent:rgba( 22,162,160,0.5);
     -fx-first-color-hex:#16A2A0;
     

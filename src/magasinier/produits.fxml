@@ -189,7 +189,7 @@
             </ImageView>
          </graphic>
       </JFXButton>
-      <TableView fx:id="tableView" layoutX="11.0" layoutY="226.0" tableMenuButtonVisible="true" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="11.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="226.0">
+      <TableView fx:id="tableView" layoutX="11.0" layoutY="226.0" onMouseClicked="#tableViewClicked" tableMenuButtonVisible="true" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="11.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="226.0">
          <columns>
             <TableColumn fx:id="codeCol" prefWidth="71.0" text="Code" />
             <TableColumn fx:id="nomCol" prefWidth="125.0" text="Nom" />

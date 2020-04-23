@@ -26,6 +26,7 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -117,7 +118,13 @@ public class dashboardController implements Initializable {
     
     void loadInterface(boolean test,MouseEvent event){
         try {
-             Stage tmp = (Stage) ((JFXButton)event.getSource()).getScene().getWindow();
+             Stage tmp;
+             if(test){
+                 tmp=(Stage) ((JFXButton)event.getSource()).getScene().getWindow();
+             }else{
+                 tmp =(Stage) ((ImageView)event.getSource()).getScene().getWindow();
+             }
+             
              FXMLLoader loader=new FXMLLoader(getClass().getResource(test?"/magasinier/produits.fxml":"/login/login.fxml"));
              Scene newScene = new Scene(loader.load());
              if(test){
@@ -128,8 +135,8 @@ public class dashboardController implements Initializable {
                 controller.loadResource(lang);
              }
              tmp.setScene(newScene);
-             tmp.setMaximized(false);
-             tmp.setMaximized(true);
+             //tmp.hide();
+             tmp.show();
          } catch (IOException ex) {
              Logger.getLogger(loginController.class.getName()).log(Level.SEVERE, null, ex);
          }

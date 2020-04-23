@@ -15,3 +15,21 @@ and open the template in the editor.
     -jfx-focus-color:-fx-second-color;
     -jfx-unfocus-color:-fx-first-color;
 }
+
+.textInfo{
+    -jfx-focus-color:-fx-second-color;
+    -jfx-unfocus-color:-fx-first-color;
+    -jfx-label-float:true;
+    -fx-text-fill: -fx-second-color;
+    -fx-prompt-text-fill: -fx-second-color;
+    -fx-font-size:15px;
+}
+
+.textInfo2{
+    -jfx-focus-color:-fx-first-color;
+    -jfx-unfocus-color:-fx-first-color;
+    -jfx-label-float:true;
+    -fx-text-fill: -fx-first-color;
+    -fx-prompt-text-fill: -fx-first-color;
+    -fx-font-size:16px;
+}

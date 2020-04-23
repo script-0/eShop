@@ -13,6 +13,7 @@ import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
+import controllerUtils.controllerUtils;
 import java.io.IOException;
 import java.net.URL;
 import javafx.event.ActionEvent;
@@ -80,13 +81,14 @@ public class loginController implements Initializable {
                  controller.loadResource(lang);
              }
              
-             
              tmp.setScene(newScene);
+             
+            // tmp.hide();
+             tmp.show();
              //tmp.setMaximized(true);
-            /* tmp.sizeToScene();
-             tmp.centerOnScreen();*/
-             tmp.setMaximized(false);
-             tmp.setMaximized(true);
+            // tmp.sizeToScene();
+             //tmp.centerOnScreen();*/
+             //controllerUtils.launchTransition(newScene.getRoot());
          } catch (IOException ex) {
              Logger.getLogger(loginController.class.getName()).log(Level.SEVERE, null, ex);
          }

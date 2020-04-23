@@ -17,7 +17,7 @@ and open the template in the editor.
 @import url("toggleButton.css");
 @import url("buttons.css");
 @import url("comboBox.css");
-
+@import url("textField.css");
 
 .rootPane2{
     -fx-background-color: -fx-first-color-91-transparent;
@@ -27,15 +27,6 @@ and open the template in the editor.
 .apercu{
     -fx-text-fill: -fx-second-color;
     -fx-font-size:14px;
-}
-
-.textInfo{
-    -jfx-focus-color:-fx-second-color;
-    -jfx-unfocus-color:-fx-first-color;
-    -jfx-label-float:true;
-    -fx-text-fill: -fx-second-color;
-    -fx-prompt-text-fill: -fx-second-color;
-    -fx-font-size:15px;
 }
 
 .labelSombre{

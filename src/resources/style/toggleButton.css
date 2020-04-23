@@ -16,11 +16,11 @@ and open the template in the editor.
     
     -fx-alignment: CENTER;
     -fx-content-display: RIGHT;
+    
     -jfx-toggle-color:-fx-second-color;
+    -jfx-toggle-line-color:-fx-second-color;
     
     -jfx-untoggle-color:-fx-second-color;
-    
-    -jfx-toggle-line-color:-fx-second-color;
     
     -jfx-untoggle-line-color:derive(-fx-first-color-hex,50%);
     
