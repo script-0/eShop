@@ -269,8 +269,8 @@ public class produitsController implements Initializable {
              Pane pane = (Pane)loader.load();
              Scene newScene = new Scene(pane);
              tmp.setScene(newScene);             
-             tmp.setWidth(528);
-             tmp.setHeight(525);
+             tmp.setWidth(488);
+             tmp.setHeight(5551);
              tmp.setResizable(false);
              
              tmp.showAndWait();
