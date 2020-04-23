@@ -13,6 +13,17 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
+
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXDatePicker;
+import com.jfoenix.controls.JFXTextArea;
+import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.JFXToggleButton;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+
 /**
  * FXML Controller class
  *
@@ -23,6 +34,62 @@ public class EditProduitsController implements Initializable {
     /**
      * Initializes the controller class.
      */
+    
+     @FXML
+    private Label lien;
+
+    @FXML
+    private Label lien1;
+
+    @FXML
+    private Label lien11;
+
+    @FXML
+    private JFXTextArea description;
+
+    @FXML
+    private JFXButton valider;
+
+    @FXML
+    private JFXButton annuler;
+
+    @FXML
+    private JFXTextField code;
+
+    @FXML
+    private JFXTextField nom;
+
+    @FXML
+    private JFXTextField quantite;
+
+    @FXML
+    private JFXTextField fournisseur;
+
+    @FXML
+    private JFXToggleButton actif;
+
+    @FXML
+    private JFXTextField prixA;
+
+    @FXML
+    private JFXTextField prixV;
+
+    @FXML
+    private JFXDatePicker date;
+
+    @FXML
+    private JFXComboBox<String> categorie;
+
+    @FXML
+    void annuler(MouseEvent event) {
+        close(event);
+    }
+    
+    @FXML
+    void valider(ActionEvent event) {
+
+    }   
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO

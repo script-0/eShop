@@ -93,13 +93,13 @@
       <Separator layoutX="328.0" layoutY="57.0" prefHeight="3.0" prefWidth="101.0" />
       <Pane layoutX="1.0" layoutY="79.0" prefHeight="445.0" prefWidth="480.0" styleClass="panePied">
          <children>
-            <JFXTextArea layoutX="264.0" layoutY="284.0" prefHeight="121.0" prefWidth="161.0" promptText="Description" styleClass="textInfo" />
+            <JFXTextArea fx:id="description" layoutX="264.0" layoutY="284.0" prefHeight="121.0" prefWidth="161.0" promptText="Description" styleClass="textInfo" />
             <JFXButton fx:id="valider" disable="true" layoutX="157.0" layoutY="400.0" onAction="#valider" ripplerFill="#2196f3" styleClass="b" text="Valider">
                <font>
                   <Font size="15.0" />
                </font>
             </JFXButton>
-            <JFXButton fx:id="annuler" layoutX="27.0" layoutY="400.0" onAction="#annuler" ripplerFill="#2196f3" styleClass="b" text="Annuler">
+            <JFXButton fx:id="annuler" layoutX="27.0" layoutY="400.0" onMouseClicked="#annuler" ripplerFill="#2196f3" styleClass="b" text="Annuler">
                <font>
                   <Font size="15.0" />
                </font>
@@ -107,54 +107,54 @@
             <Separator layoutX="20.0" layoutY="389.0" opacity="0.59" prefHeight="3.0" prefWidth="210.0" />
             <Label layoutX="357.0" layoutY="420.0" styleClass="version" text="\@script-0---eShop" />
          </children></Pane>
-      <JFXTextField layoutX="38.0" layoutY="100.0" prefHeight="31.0" prefWidth="93.0" promptText="Code Produit" styleClass="textInfo" />
+      <JFXTextField fx:id="code" layoutX="38.0" layoutY="100.0" prefHeight="31.0" prefWidth="93.0" promptText="Code Produit" styleClass="textInfo" />
       <ImageView fitHeight="32.0" fitWidth="60.0" layoutX="141.0" layoutY="101.0" preserveRatio="true">
          <image>
             <Image url="@../resources/img/pin_code.png" />
          </image>
       </ImageView>
-      <JFXTextField layoutX="37.0" layoutY="167.0" prefHeight="31.0" prefWidth="93.0" promptText="Nom Produit" styleClass="textInfo" />
+      <JFXTextField fx:id="nom" layoutX="37.0" layoutY="167.0" prefHeight="31.0" prefWidth="93.0" promptText="Nom Produit" styleClass="textInfo" />
       <ImageView fitHeight="32.0" fitWidth="60.0" layoutX="144.0" layoutY="168.0" preserveRatio="true">
          <image>
             <Image url="@../resources/img/product_management_Blanc.png" />
          </image>
       </ImageView>
-      <JFXTextField layoutX="270.0" layoutY="98.0" prefHeight="31.0" prefWidth="93.0" promptText="Quantité" styleClass="textInfo" />
+      <JFXTextField fx:id="quantite" layoutX="270.0" layoutY="98.0" prefHeight="31.0" prefWidth="93.0" promptText="Quantité" styleClass="textInfo" />
       <ImageView fitHeight="32.0" fitWidth="60.0" layoutX="363.0" layoutY="100.0" preserveRatio="true">
          <image>
             <Image url="@../resources/img/quantity.png" />
          </image>
       </ImageView>
-      <JFXTextField layoutX="41.0" layoutY="307.0" prefHeight="37.0" prefWidth="110.0" promptText="Code Four" styleClass="textInfo" />
+      <JFXTextField fx:id="fournisseur" layoutX="41.0" layoutY="307.0" prefHeight="37.0" prefWidth="110.0" promptText="Code Four" styleClass="textInfo" />
       <ImageView fitHeight="32.0" fitWidth="60.0" layoutX="146.0" layoutY="311.0" preserveRatio="true">
          <image>
             <Image url="@../resources/img/ID.png" />
          </image>
       </ImageView>
-      <JFXToggleButton graphicTextGap="0.0" layoutX="35.0" layoutY="369.0" prefHeight="70.0" prefWidth="175.0" text="     Activé ">
+      <JFXToggleButton fx:id="actif" graphicTextGap="0.0" layoutX="35.0" layoutY="369.0" prefHeight="70.0" prefWidth="175.0" text="     Activé ">
          <font>
             <Font size="15.0" />
          </font>
       </JFXToggleButton>
-      <JFXTextField layoutX="270.0" layoutY="165.0" prefHeight="31.0" prefWidth="93.0" promptText="Prix Achat" styleClass="textInfo" />
+      <JFXTextField fx:id="prixA" layoutX="270.0" layoutY="165.0" prefHeight="31.0" prefWidth="93.0" promptText="Prix Achat" styleClass="textInfo" />
       <ImageView fitHeight="32.0" fitWidth="60.0" layoutX="363.0" layoutY="167.0" preserveRatio="true">
          <image>
             <Image url="@../resources/img/dollar.png" />
          </image>
       </ImageView>
-      <JFXTextField layoutX="270.0" layoutY="228.0" prefHeight="31.0" prefWidth="93.0" promptText="Prix Vente" styleClass="textInfo" />
+      <JFXTextField fx:id="prixV" layoutX="270.0" layoutY="228.0" prefHeight="31.0" prefWidth="93.0" promptText="Prix Vente" styleClass="textInfo" />
       <ImageView fitHeight="32.0" fitWidth="60.0" layoutX="366.0" layoutY="230.0" preserveRatio="true">
          <image>
             <Image url="@../resources/img/dollar.png" />
          </image>
       </ImageView>
-      <JFXDatePicker defaultColor="WHITE" editable="false" layoutX="40.0" layoutY="233.0" prefHeight="25.0" prefWidth="139.0" promptText="Date Insertion" style="-fx-text-fill: #ffffff;" />
+      <JFXDatePicker fx:id="date" defaultColor="WHITE" editable="false" layoutX="40.0" layoutY="233.0" prefHeight="25.0" prefWidth="139.0" promptText="Date Insertion" style="-fx-text-fill: #ffffff;" />
       <ImageView fitHeight="32.0" fitWidth="60.0" layoutX="371.0" layoutY="302.0" preserveRatio="true">
          <image>
             <Image url="@../resources/img/category.png" />
          </image>
       </ImageView>
-      <JFXComboBox layoutX="268.0" layoutY="307.0" prefHeight="25.0" prefWidth="110.0" promptText="Catégorie" />
+      <JFXComboBox fx:id="categorie" layoutX="268.0" layoutY="307.0" prefHeight="25.0" prefWidth="110.0" promptText="Catégorie" />
    </children>
    <effect>
       <DropShadow />
