@@ -21,7 +21,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="558.0" prefWidth="715.0" styleClass="rootPane" stylesheets="@../resources/style/magasinier-Dashboard.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="magasinier.dashboardController">
+<AnchorPane prefHeight="558.0" prefWidth="715.0" styleClass="rootPane" stylesheets="@../resources/style/magasinier-Dashboard.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="magasinier.DashboardController">
    <children>
       <Pane layoutX="40.0" layoutY="25.0" prefHeight="520.0" prefWidth="705.0" styleClass="rootPane2" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="25.0" />
       <HBox alignment="CENTER_LEFT" layoutX="245.0" layoutY="76.0" prefHeight="22.0" prefWidth="498.0" styleClass="chemin" AnchorPane.leftAnchor="245.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="70.0">
@@ -96,7 +96,7 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <ImageView fitHeight="40.0" fitWidth="39.0" layoutX="486.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="220.0" AnchorPane.topAnchor="27.0">
+      <ImageView fitHeight="40.0" fitWidth="39.0" layoutX="459.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="217.0" AnchorPane.topAnchor="27.0">
          <image>
             <Image url="@../resources/img/user.png" />
          </image>

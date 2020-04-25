@@ -17,14 +17,14 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="638.0" prefWidth="927.0" styleClass="rootPane" stylesheets="@../resources/style/magasinier-Produit.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="magasinier.produitsController">
+<AnchorPane prefHeight="662.0" prefWidth="951.0" styleClass="rootPane" stylesheets="@../resources/style/magasinier-Produit.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="magasinier.ProduitsController">
    <children>
       <Pane layoutX="40.0" layoutY="25.0" prefHeight="520.0" prefWidth="705.0" styleClass="rootPane2" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="25.0" />
       <HBox alignment="CENTER_LEFT" layoutX="245.0" layoutY="76.0" prefHeight="22.0" prefWidth="498.0" styleClass="chemin" AnchorPane.leftAnchor="245.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="70.0">
          <children>
             <HBox>
                <children>
-                  <Label fx:id="lien" prefHeight="20.0" prefWidth="72.0" text="Magasinier" textFill="#2196f3">
+                  <Label fx:id="lien" text="Magasinier" textFill="#2196f3">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -95,7 +95,7 @@
             <DropShadow />
          </effect>
       </Pane>
-      <Label fx:id="username" layoutX="523.0" layoutY="35.0" styleClass="username" text="\${Username}" textFill="WHITE" AnchorPane.rightAnchor="115.0" AnchorPane.topAnchor="35.0">
+      <Label fx:id="username" layoutX="720.0" layoutY="35.0" styleClass="username" text="\${Username}" textFill="WHITE" AnchorPane.rightAnchor="124.0" AnchorPane.topAnchor="35.0">
          <font>
             <Font size="18.0" />
          </font>
@@ -151,7 +151,7 @@
          </image>
       </ImageView>
       <Pane layoutX="32.0" layoutY="172.0" prefHeight="39.0" prefWidth="836.0" styleClass="paneDetails" AnchorPane.leftAnchor="9.0" AnchorPane.rightAnchor="11.0" AnchorPane.topAnchor="172.0" />
-      <JFXButton fx:id="refresh" layoutX="231.0" layoutY="175.0" onAction="#refresh" styleClass="b" text="Refresh" AnchorPane.rightAnchor="522.0" AnchorPane.topAnchor="175.0">
+      <JFXButton fx:id="refresh" layoutX="343.0" layoutY="175.0" onAction="#refresh" styleClass="b" text="Rafraichir" AnchorPane.rightAnchor="530.0" AnchorPane.topAnchor="175.0">
          <graphic>
             <ImageView fitHeight="22.0" fitWidth="29.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -163,7 +163,7 @@
             </ImageView>
          </graphic>
       </JFXButton>
-      <JFXButton fx:id="print" layoutX="321.0" layoutY="175.0" onAction="#print" styleClass="b" text="Print" AnchorPane.rightAnchor="447.0" AnchorPane.topAnchor="175.0">
+      <JFXButton fx:id="print" layoutX="431.0" layoutY="175.0" onAction="#print" styleClass="b" text="Imprimer" AnchorPane.rightAnchor="427.0" AnchorPane.topAnchor="175.0">
          <graphic>
             <ImageView fitHeight="22.0" fitWidth="22.0" mouseTransparent="true" preserveRatio="true">
                <image>
@@ -203,12 +203,12 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
-      <Label fx:id="searchBy" layoutX="276.0" layoutY="180.0" prefHeight="25.0" prefWidth="75.0" text="Search By" AnchorPane.rightAnchor="364.0" AnchorPane.topAnchor="180.0">
+      <Label fx:id="searchBy" layoutX="536.0" layoutY="179.0" prefHeight="25.0" prefWidth="75.0" text="Search By" AnchorPane.rightAnchor="340.0" AnchorPane.topAnchor="179.0">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
-      <JFXComboBox fx:id="searchColumn" layoutX="350.0" layoutY="180.0" onAction="#initSearchPane" prefHeight="25.0" prefWidth="90.0" promptText="Name" AnchorPane.rightAnchor="275.0" AnchorPane.topAnchor="180.0" />
+      <JFXComboBox fx:id="searchColumn" layoutX="606.0" layoutY="179.0" onAction="#initSearchPane" prefHeight="25.0" prefWidth="90.0" promptText="Name" AnchorPane.rightAnchor="255.0" AnchorPane.topAnchor="179.0" />
       <JFXButton fx:id="add" layoutX="14.0" layoutY="175.0" onAction="#add" styleClass="b" text="Ajouter">
          <graphic>
             <ImageView fitHeight="22.0" fitWidth="29.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
@@ -245,9 +245,9 @@
             </ImageView>
          </graphic>
       </JFXButton>
-      <JFXButton fx:id="stopSearchButton" contentDisplay="CENTER" graphicTextGap="0.0" layoutX="643.0" layoutY="176.0" onAction="#initSearchPane" prefHeight="32.0" prefWidth="38.0" styleClass="searchButton" text=" " visible="false" AnchorPane.rightAnchor="219.0" AnchorPane.topAnchor="176.0">
+      <JFXButton fx:id="stopSearchButton" contentDisplay="CENTER" graphicTextGap="0.0" layoutX="694.0" layoutY="175.0" onAction="#initSearchPane" prefHeight="32.0" prefWidth="38.0" styleClass="searchButton" text=" " visible="false" AnchorPane.rightAnchor="219.0">
          <graphic>
-            <ImageView fitHeight="20.0" fitWidth="24.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="19.0" fitWidth="19.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../resources/img/clear_search.png" />
                </image>

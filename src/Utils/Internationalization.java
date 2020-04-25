@@ -18,6 +18,11 @@ public final class Internationalization {
     
     static final Locale FR = new Locale("fr");  
     
+    static final ResourceBundle enBundle =ResourceBundle.getBundle("resources/languages/bundle", EN);
+    
+    static final ResourceBundle frBundle =ResourceBundle.getBundle("resources/languages/bundle", FR);
+
+    
     static String lang = "En";
     
     public static ResourceBundle initLanguage(JFXComboBox<String> langue){
@@ -26,19 +31,19 @@ public final class Internationalization {
        return getBundle(lang);
     }
     
-    public static Locale getCurrentLocale(){
-        return lang.equalsIgnoreCase("En")?EN:FR;
+    public static ResourceBundle getCurrentBundle(){
+        return lang.equalsIgnoreCase("En")?enBundle:frBundle;
     }
     
-    public static Locale getLocale(){
+    public static ResourceBundle getBundle(){
        lang=lang.equalsIgnoreCase("En")?"Fr":"En";
-       return getCurrentLocale();
+       return getCurrentBundle();
     }
     
     public static ResourceBundle getBundle(String language){
         if(language.toLowerCase().startsWith(lang.toLowerCase()))
-            return ResourceBundle.getBundle("resources/languages/bundle", getCurrentLocale());
+            return getCurrentBundle();
         else
-            return ResourceBundle.getBundle("resources/languages/bundle", getLocale());
+            return getBundle();
     }
 }
