@@ -19,6 +19,8 @@ import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXToggleButton;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.util.StringConverter;
@@ -42,6 +44,9 @@ public class EditProduitsController implements Initializable {
 
     @FXML
     private Label lien11;
+    
+    @FXML
+    private Label title;
 
     @FXML
     private JFXTextArea description;
@@ -86,14 +91,65 @@ public class EditProduitsController implements Initializable {
     
     @FXML
     void valider() {
-
+        Produits p = new Produits(code.getText(),
+                                        nom.getText(),
+                                        Double.valueOf(prixV.getText()), 
+                                        Double.valueOf(prixA.getText()),
+                                        Double.valueOf(quantite.getText()),
+                                        description.getText(),
+                                        fournisseur.getText(),
+                                        date.getValue().toString(),
+                                        (actif.isSelected()?"Enabled":"Disabled"),
+                                        categorie.getValue());
+        if(index == -1){
+            sortedData.add(p);
+        }else{
+            sortedData.set(index,p);
+        }
     }   
+    
+    public void loadCategories(){
+        categorie.getItems().addAll("Agro-Alimentaire","Electro-Menager","Cosmetique","Autres");
+    }
+    
+    public void setType(Boolean b){
+        if(b){
+            lien11.setText("Ajouter un Produit");
+            title.setText("Ajouter un Produit");
+        }
+    }
+    
+    ObservableList<Produits> sortedData ;
+    int index = -1;
+    
+    public void setItems(ObservableList<Produits> items){
+        sortedData = items;
+    }
+    
+    public void loadData(int i){
+        index = i;
+        Produits p = sortedData.get(i);
+        code.setText(p.getCode());
+        nom.setText(p.getName());
+        quantite.setText(String.valueOf( p.getQte() ) );
+        fournisseur.setText(p.getFournisseur());
+        actif.setSelected(true);
+        prixA.setText( String.valueOf( p.getPrixA() ) );
+        prixV.setText( String.valueOf( p.getPrixV() ) );
+        String[] tmp = p.getDate().split("-");
+        date.setValue( LocalDate.of(Integer.valueOf(tmp[2]), Integer.valueOf(tmp[1]), Integer.valueOf(tmp[0])) );
+        description.setText(p.getDescription());
+        actif.setSelected(p.getEtat().equalsIgnoreCase("enabled"));
+        categorie.setValue(p.getCategorie());
+    }
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO;
         date.setValue(LocalDate.now());
+        valider.setDisable(false);
         changeLocaleOfDate();
+        loadCategories();
     }    
     
     void changeLocaleOfDate(){

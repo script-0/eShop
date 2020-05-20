@@ -77,15 +77,62 @@ public class ProduitsController implements Initializable {
     private JFXButton add;
 
     @FXML
-    private JFXButton modify;
-
+    private JFXButton modify; 
+    
+    /******************** User popup ********************/
+    
+    @FXML
+    private Pane userPopup;
+    
+    @FXML
+    public void hideUserPopup(MouseEvent e){
+        ControllerUtils.closeTransition(userPopup);
+        userPopup.setVisible(false);
+    }
+    
+    @FXML
+    public void showUserPopup(MouseEvent e){        
+        userPopup.setVisible(true);
+        ControllerUtils.openTransition(userPopup);
+    }
+    
+    /********************** Tableview Popup *************************/
+    
+    @FXML
+    private Pane popup;
+    
+    @FXML
+    public void showPopup(MouseEvent e){
+        popup.relocate(e.getSceneX(), e.getSceneY()+3);
+        popup.setVisible(true);
+        ControllerUtils.openTransition(popup);
+    }
+    
+    @FXML
+    public void hidePopup(MouseEvent e){
+        ControllerUtils.closeTransition(popup);
+        popup.setVisible(false);
+    }
+    
+    @FXML
+    public void modifyPopup(){
+        modify();
+        hidePopup(null);
+    }
+    
+    @FXML
+    public void deletePopup(){
+        delete();
+        hidePopup(null);
+    }
+    
     /************************** /******************************/ 
     @FXML
     private JFXButton delete;
     @FXML
     void delete() {
             
-         ObservableList<produits> items = tableView.getSelectionModel().getSelectedItems();
+         ObservableList<Produits> items = tableView.getSelectionModel().getSelectedItems();
          if(items == null)
          {
              //message d'erreur "Pas d'elements selectionnes
@@ -101,45 +148,45 @@ public class ProduitsController implements Initializable {
     /****************************** /*************************************/
 
     @FXML
-    void add(ActionEvent event) {
-        launchEditProduit();
+    void add() {
+        launchEditProduit(-1);
     }
     
-     @FXML
-    void modify(ActionEvent event) {
-        launchEditProduit();
+    @FXML
+    void modify() {
+        launchEditProduit(tableView.getSelectionModel().getSelectedIndex());
     }
     
     /* ***************************table view ****************/
     @FXML
-    private TableView<produits> tableView;
+    private TableView<Produits> tableView;
 
     @FXML
-    private TableColumn<produits, String> codeCol;
+    private TableColumn<Produits, String> codeCol;
 
     @FXML
-    private TableColumn<produits, String> nomCol;
+    private TableColumn<Produits, String> nomCol;
 
     @FXML
-    private TableColumn<produits, Double> prixCol;
+    private TableColumn<Produits, Double> prixCol;
 
     @FXML
-    private TableColumn<produits, Double> qteCol;
+    private TableColumn<Produits, Double> qteCol;
 
     @FXML
-    private TableColumn<produits, String> dateCol;
+    private TableColumn<Produits, String> dateCol;
 
     @FXML
-    private TableColumn<produits, String> etatCol;
+    private TableColumn<Produits, String> etatCol;
 
     @FXML
-    private TableColumn<produits, String> categorieCol;
+    private TableColumn<Produits, String> categorieCol;
     
-    ObservableList<produits> listProduits = FXCollections.observableArrayList();
+    static ObservableList<Produits> listProduits = FXCollections.observableArrayList();
     
-    FilteredList<produits> filteredData;
+    FilteredList<Produits> filteredData;
     
-    SortedList<produits> sortedData ;
+    SortedList<Produits> sortedData ;
     
     int selectedSearchColumn = 1;/* 1 => Code
                                     2 => Nom
@@ -197,8 +244,9 @@ public class ProduitsController implements Initializable {
     public void loadSuppliers(){
         //Load Suppliers from Database
         tableView.setItems(null);
-        listProduits.add(new produits("P001","Broli-Spaghetti",1120,1100,1000,"Patte alimentaire (Sphatteti) Broli","f081","04-06-2020","Good","Patte Alimentaire"));
-        
+        listProduits.add(new Produits("P001","Broli-Spaghetti",1120,1100,1000,"Patte alimentaire (Sphatteti) Broli","f081","23-04-2020","Enabled","Agro Alimentaire"));
+        listProduits.add(new Produits("E018","Micro-Onde",101000,100000,50,"Micro onde","f011","20-03-2020","Enabled","Electro-Menager"));
+        listProduits.add(new Produits("C081","Carotina",2000,2200,80,"Lait de Toilette Carotina","f101","04-05-2020","Enabled","Cosmetique"));
         /*fournisseursUtils.list().forEach((e)->{
             listSuppliers.add(e);
         });*/
@@ -224,10 +272,10 @@ public class ProduitsController implements Initializable {
                 switch(i)
                 {
                     case 0:
-                        if(person.getName().toLowerCase().contains(lowerCaseFilter)) return true;
+                        if(person.getCode().toLowerCase().contains(lowerCaseFilter)) return true;
                         break;
                     case 1:
-                        if(person.getCode().toLowerCase().contains(lowerCaseFilter)) return true;
+                        if(person.getName().toLowerCase().contains(lowerCaseFilter)) return true;
                         break;
                     case 2:
                         if(String.valueOf(person.getPrixV()).toLowerCase().contains(lowerCaseFilter)) return true;
@@ -265,16 +313,25 @@ public class ProduitsController implements Initializable {
         
     }
     
-    void launchEditProduit(){
+    void launchEditProduit(int p){
         try {
              Stage tmp = new Stage();
              //tmp.initStyle(StageStyle.TRANSPARENT);
              tmp.initModality(Modality.APPLICATION_MODAL);
              FXMLLoader loader=new FXMLLoader(getClass().getResource("/magasinier/editProduits.fxml"));
+             
              Pane pane = (StackPane)loader.load();
+             EditProduitsController con = loader.getController();
+             con.setItems(listProduits);
+             if(p!=-1){
+                 con.loadData(p);
+             }else{
+                 con.setType(true);
+             }
+             
              Scene newScene = new Scene(pane);
              tmp.setScene(newScene);             
-             tmp.setWidth(488);
+             tmp.setWidth(453);
              tmp.setHeight(555);
              tmp.setResizable(false);             
              tmp.showAndWait();
@@ -284,8 +341,14 @@ public class ProduitsController implements Initializable {
          }
     }
     
-    @FXML void tableViewClicked(MouseEvent e){
-        if(e.getClickCount()>2) launchEditProduit();
+    @FXML 
+    public void tableViewClicked(MouseEvent e){
+        if(e.isPopupTrigger()) showPopup(e);
+        
+        /*if(e.getClickCount()>2){
+            if(!tableView.getSelectionModel().getSelectedIndices().isEmpty())
+                launchEditProduit(tableView.getSelectionModel().getSelectedItems().get(0));
+        }*/
     }
     
  /* *************************************************************** */ 
@@ -441,12 +504,16 @@ public class ProduitsController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        popup.setVisible(false);
+        userPopup.setVisible(false);
         titres = Internationalization.initLanguage(langue);
         langue.valueProperty().addListener((observable, oldValue, newValue) -> {
             loadResource(newValue);
         });
         initSearch();
         initializeTableView();
+        modify.setDisable(true);
+        delete.setDisable(true);
     }    
     
 }

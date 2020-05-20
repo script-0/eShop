@@ -12,7 +12,6 @@ import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXToggleButton;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,6 +22,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
@@ -31,8 +31,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import login.LoginController;
 
@@ -79,6 +79,9 @@ public class FacturationController implements Initializable {
 
     @FXML
     private ImageView add;
+    
+    @FXML
+    private ImageView productImg;
 
     @FXML
     private Label total;
@@ -147,7 +150,7 @@ public class FacturationController implements Initializable {
     
     double tmp,tmp2,tmp3;
     @FXML
-    void add(MouseEvent event) {
+    void add(MouseEvent event) {//Ajoute le nouvel achat a la liste des achats
         //apres verification
         if(!quantite.getText().equals("") && !prixP.getText().equals("NaN")){
             tmp = Double.valueOf(quantite.getText().replace(" ",""));
@@ -187,7 +190,7 @@ public class FacturationController implements Initializable {
     }
 
     @FXML
-    void del(ActionEvent event) {
+    void del(ActionEvent event) { 
         panier.getSelectionModel().getSelectedItems().forEach((a)->{
             panier.getItems().remove(a);
         });
@@ -275,7 +278,7 @@ public class FacturationController implements Initializable {
         
         initializeProductInfos();
         
-        
+        del.setDisable(true);
    } 
     
    public void initializeLanguage(){
@@ -324,4 +327,16 @@ public class FacturationController implements Initializable {
          });
      }   
 
+   @FXML
+   public void loadApercu() {
+    /*ImageView imgTmp = new ImageView(productImg.getImage());
+    imgTmp.setScaleX(2.5);
+    imgTmp.setScaleY(2.5);
+    Stage tmpS = new Stage( );
+    tmpS.setScene(new Scene((Parent)new Pane( (imgTmp) ) ) );
+    tmpS.initModality(Modality.APPLICATION_MODAL);
+    imgTmp.setOnMouseClicked((e)-> tmpS.close());
+    tmpS.show();*/
+}
+   
 }

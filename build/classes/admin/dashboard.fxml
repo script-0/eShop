@@ -35,7 +35,7 @@
                   </ImageView>
                   <HBox layoutX="188.0" layoutY="43.0" prefHeight="20.0" prefWidth="458.0" styleClass="chemin">
                      <children>
-                        <Label fx:id="lien" prefHeight="20.0" prefWidth="72.0" text="Dashboard" textFill="#2196f3">
+                        <Label fx:id="lien" prefHeight="20.0" text="Dashboard" textFill="#2196f3">
                            <font>
                               <Font size="14.0" />
                            </font>

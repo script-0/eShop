@@ -162,7 +162,6 @@ public class DashboardController implements Initializable {
         
          // flowGraph
                 initFlowGraph();
-         
 
        //proportionsCategorie Graph
                 initProportionsCategorie();

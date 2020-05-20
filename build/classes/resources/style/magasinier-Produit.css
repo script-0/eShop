@@ -51,3 +51,40 @@ and open the template in the editor.
     -fx-prompt-text:-fx-first-color;
     -fx-font-size:14px;
 }
+
+.popup{
+    -fx-background-color:-fx-second-color;
+    -fx-border-color: -fx-first-color;
+    -fx-border-radius: 0em 0.8em 0.8em 0em;
+    -fx-background-radius: 0em 0.9em 0.9em 0em;
+    -fx-effect:dropshadow(three-pass-box,-fx-shadow-color,10,0,0,0);
+}
+
+.popup .button{
+   /* -fx-border-radius: 0em 0.8em 0.8em 0em;*/
+    -fx-background-radius: 0em 0.7em 0.7em 0em;
+}
+
+.popup .button:hover{
+    -fx-background-color: -fx-first-color;
+    -fx-text-fill: -fx-second-color;
+}
+
+.popupUser{    
+    -fx-background-color:-fx-second-color;
+    -fx-border-color: -fx-first-color;
+    -fx-border-radius: 0.8em 0.8em 0.8em 0em;
+    -fx-background-radius: 0.9em 0.9em 0.9em 0em;
+    -fx-effect:dropshadow(three-pass-box,-fx-shadow-color,10,0,0,0);
+}
+
+.popupUser .button{
+    -fx-background-radius: 0em 0.7em 0.7em 0em;
+    -fx-text-fill: -fx-first-color;
+    -fx-cursor: hand;
+}
+
+.popupUser .button:hover{
+    -fx-background-color: -fx-first-color;
+    -fx-text-fill: -fx-second-color;
+}

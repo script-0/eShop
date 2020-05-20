@@ -62,12 +62,21 @@ public class LoginController implements Initializable {
     @FXML
     void logIn(ActionEvent event) {
         boolean test = asAdmin.isSelected();
+        int i = (user.getText().equalsIgnoreCase("cassier"))?1:0;
          try {
              Stage tmp = (Stage) ((JFXButton)event.getSource()).getScene().getWindow();
-             FXMLLoader loader=new FXMLLoader(getClass().getResource(test?"/magasinier/dashboard.fxml":"/caissier/facturation.fxml"));
+             FXMLLoader loader=null;
+             if(test){
+                 loader = new FXMLLoader(getClass().getResource("/admin/dashboard.fxml"));
+             }else{
+                 loader = new FXMLLoader(getClass().getResource((i==0)?"/magasinier/dashboard.fxml":"/caissier/facturation.fxml"));
+             }
              Scene newScene = new Scene(loader.load());
              if(test){
-                 DashboardController controller = loader.getController();
+                 admin.DashboardController controller= loader.getController();
+                 controller.loadResource(langue.getValue());
+             }else if(i==0){
+                 magasinier.DashboardController controller = loader.getController();
                  controller.loadResource(langue.getValue());
              }else{
                  FacturationController controller = loader.getController();

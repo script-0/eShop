@@ -53,3 +53,10 @@ and open the template in the editor.
     -fx-fill:-fx-first-color;
     -fx-font-size:15px;
 }
+
+.productImg:hover{
+    -fx-scale-x: 2;
+    -fx-scale-y: 2;
+    -fx-border-color: -fx-first-color;
+    -fx-border-radius: 1em 1em 1em 1em;
+}

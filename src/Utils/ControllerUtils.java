@@ -42,5 +42,30 @@ public class ControllerUtils{
 	ft.play();	
     
     }
+    
+    public static void openTransition( Node b){
+	transition(b,true);
+    }
+    
+    public static void closeTransition( Node b){
+        transition(b,false);
+    }
+    
+    public static void transition(Node b, boolean open){
+        ScaleTransition st = new ScaleTransition(Duration.seconds(.1), b);
+	st.setFromX((open?.8:1));
+	st.setFromY((open?.8:1));
+	st.setToX((open?1:0));
+	st.setToY((open?1:0));
+	
+	
+	FadeTransition ft = new FadeTransition(Duration.seconds(.1), b);
+	ft.setFromValue((open?.2:1));
+	ft.setToValue((open?1:0));
+        
+        
+        st.play();
+	ft.play();
+    }
 }
 

@@ -32,7 +32,7 @@ and open the template in the editor.
 }
 
 .panePied{
-    -fx-background-color:-fx-first-color-91-transparent;
+    -fx-background-color:-fx-first-color;
     -fx-background-radius:5em 5em 0em 0em;
 }
 

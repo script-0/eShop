@@ -15,11 +15,12 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="662.0" prefWidth="951.0" styleClass="rootPane" stylesheets="@../resources/style/magasinier-Produit.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="magasinier.ProduitsController">
    <children>
-      <Pane layoutX="40.0" layoutY="25.0" prefHeight="520.0" prefWidth="705.0" styleClass="rootPane2" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="25.0" />
+      <Pane layoutX="5.0" layoutY="142.0" prefHeight="514.0" prefWidth="938.0" styleClass="rootPane2" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="20.0" />
       <HBox alignment="CENTER_LEFT" layoutX="245.0" layoutY="76.0" prefHeight="22.0" prefWidth="498.0" styleClass="chemin" AnchorPane.leftAnchor="245.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="70.0">
          <children>
             <HBox>
@@ -63,7 +64,7 @@
       </HBox>
       <Pane layoutX="10.0" layoutY="-13.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="-13.0">
          <children>
-            <Label layoutY="8.0" prefHeight="75.0" prefWidth="41.0" styleClass="e" text="e" textFill="WHITE">
+            <Label layoutX="1.0" layoutY="8.0" prefHeight="75.0" prefWidth="41.0" styleClass="e" text="e" textFill="WHITE">
                <font>
                   <Font name="Broadway" size="90.0" />
                </font>
@@ -95,22 +96,36 @@
             <DropShadow />
          </effect>
       </Pane>
-      <Label fx:id="username" layoutX="720.0" layoutY="35.0" styleClass="username" text="\${Username}" textFill="WHITE" AnchorPane.rightAnchor="124.0" AnchorPane.topAnchor="35.0">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Label>
-      <ImageView fitHeight="40.0" fitWidth="39.0" layoutX="486.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="220.0" AnchorPane.topAnchor="27.0">
-         <image>
-            <Image url="@../resources/img/user.png" />
-         </image>
-         <effect>
-            <DropShadow />
-         </effect>
-      </ImageView>
+      <Pane layoutX="724.0" layoutY="33.0" onMouseClicked="#showUserPopup" prefHeight="37.0" prefWidth="121.0" AnchorPane.rightAnchor="106.0">
+         <children>
+            <Label fx:id="username" layoutY="-7.0" styleClass="username" text="Username" textFill="WHITE">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <ImageView fitHeight="40.0" fitWidth="39.0" layoutX="82.0" layoutY="-3.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../resources/img/user.png" />
+               </image>
+               <effect>
+                  <DropShadow />
+               </effect>
+            </ImageView>
+            <Label layoutX="17.0" layoutY="15.0" text="Magasinier" textFill="#c3c0c0">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <JFXComboBox fx:id="langue" layoutX="270.0" layoutY="36.0" prefHeight="25.0" prefWidth="94.0" promptText="Language" unFocusColor="WHITE" AnchorPane.leftAnchor="270.0" AnchorPane.topAnchor="35.0">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </JFXComboBox>
       <Pane layoutX="695.0" layoutY="34.0" onMouseClicked="#logOut" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="30.0">
          <children>
-            <ImageView fitHeight="37.0" fitWidth="36.0" layoutY="-1.0" mouseTransparent="true" preserveRatio="true">
+            <ImageView fitHeight="37.0" fitWidth="36.0" focusTraversable="true" layoutY="-1.0" mouseTransparent="true" preserveRatio="true">
                <image>
                   <Image url="@../resources/img/shutdown.png" />
                </image>
@@ -120,37 +135,54 @@
             </ImageView>
          </children>
       </Pane>
-      <Separator layoutX="123.0" layoutY="122.0" opacity="0.46" prefHeight="3.0" prefWidth="474.0" AnchorPane.leftAnchor="123.0" AnchorPane.rightAnchor="118.0" AnchorPane.topAnchor="122.0" />
-      <HBox alignment="CENTER" layoutX="70.0" layoutY="108.0" prefWidth="542.0" spacing="80.0" style="-fx-alignment: center;" AnchorPane.leftAnchor="70.0" AnchorPane.rightAnchor="73.0" AnchorPane.topAnchor="108.0">
+      <Separator layoutX="123.0" layoutY="122.0" opacity="0.46" prefHeight="3.0" prefWidth="474.0" AnchorPane.leftAnchor="123.0" AnchorPane.rightAnchor="118.0" AnchorPane.topAnchor="117.0" />
+      <HBox alignment="CENTER" layoutX="70.0" layoutY="106.0" prefWidth="542.0" spacing="80.0" style="-fx-alignment: center;" AnchorPane.leftAnchor="70.0" AnchorPane.rightAnchor="73.0" AnchorPane.topAnchor="100.0">
          <children>
             <JFXButton fx:id="dashboard" onMouseClicked="#dashboard" ripplerFill="#2196f3" styleClass="b" text="Dashboard">
                <font>
                   <Font size="15.0" />
                </font>
+               <graphic>
+                  <ImageView fitHeight="24.0" fitWidth="23.0">
+                     <image>
+                        <Image url="@../resources/img/home.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
             </JFXButton>
             <JFXButton fx:id="categories" layoutX="105.0" layoutY="10.0" onAction="#categories" ripplerFill="#2196f3" styleClass="b" text="Catégories">
                <font>
                   <Font size="15.0" />
                </font>
+               <graphic>
+                  <ImageView fitHeight="24.0" fitWidth="25.0">
+                     <image>
+                        <Image url="@../resources/img/quantity.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
             </JFXButton>
             <JFXButton fx:id="produits" layoutX="10.0" layoutY="10.0" ripplerFill="#2196f3" styleClass="bSelected" text="Produits">
                <font>
                   <Font size="15.0" />
                </font>
+               <graphic>
+                  <ImageView fitHeight="27.0" fitWidth="27.0">
+                     <image>
+                        <Image url="@../resources/img/sell_stock2.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
             </JFXButton>
          </children>
       </HBox>
-      <JFXComboBox fx:id="langue" layoutX="270.0" layoutY="36.0" prefHeight="25.0" prefWidth="94.0" promptText="Language" unFocusColor="WHITE" AnchorPane.leftAnchor="270.0" AnchorPane.topAnchor="35.0">
-         <opaqueInsets>
-            <Insets />
-         </opaqueInsets>
-      </JFXComboBox>
       <ImageView fitHeight="36.0" fitWidth="34.0" layoutX="337.0" layoutY="35.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="337.0" AnchorPane.topAnchor="35.0">
          <image>
             <Image url="@../resources/img/translation.png" />
          </image>
       </ImageView>
-      <Pane layoutX="32.0" layoutY="172.0" prefHeight="39.0" prefWidth="836.0" styleClass="paneDetails" AnchorPane.leftAnchor="9.0" AnchorPane.rightAnchor="11.0" AnchorPane.topAnchor="172.0" />
+      <Pane layoutX="32.0" layoutY="172.0" prefHeight="39.0" prefWidth="619.0" styleClass="paneDetails" AnchorPane.rightAnchor="11.0" AnchorPane.topAnchor="172.0" />
+      <Pane layoutX="10.0" layoutY="172.0" prefHeight="39.0" prefWidth="304.0" styleClass="paneDetails" />
       <JFXButton fx:id="refresh" layoutX="343.0" layoutY="175.0" onAction="#refresh" styleClass="b" text="Rafraichir" AnchorPane.rightAnchor="530.0" AnchorPane.topAnchor="175.0">
          <graphic>
             <ImageView fitHeight="22.0" fitWidth="29.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
@@ -254,5 +286,98 @@
             </ImageView>
          </graphic>
       </JFXButton>
+      <Pane fx:id="popup" layoutX="20.0" layoutY="286.0" onMouseExited="#hidePopup" prefHeight="78.0" prefWidth="131.0">
+         <children>
+            <VBox alignment="CENTER" fillWidth="false" layoutX="7.0" layoutY="14.0" styleClass="popup">
+               <children>
+                  <JFXButton onAction="#modifyPopup" text="Modifier   ">
+                     <graphic>
+                        <ImageView fitHeight="22.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../resources/img/modify.png" />
+                           </image>
+                           <effect>
+                              <DropShadow />
+                           </effect>
+                        </ImageView>
+                     </graphic>
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </JFXButton>
+                  <Separator prefHeight="1.0" prefWidth="88.0" style="-fx-background-color: #00796b;" />
+                  <JFXButton layoutX="22.0" layoutY="11.0" onAction="#deletePopup" text="Supprimer">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fitHeight="22.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../resources/img/deleteBlanc.png" />
+                           </image>
+                           <effect>
+                              <DropShadow />
+                           </effect>
+                        </ImageView>
+                     </graphic>
+                  </JFXButton>
+               </children>
+            </VBox>
+            <ImageView fitHeight="28.0" fitWidth="34.0" layoutX="2.0" layoutY="-3.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../resources/img/up.png" />
+               </image>
+               <effect>
+                  <DropShadow />
+               </effect>
+            </ImageView>
+         </children>
+      </Pane>
+      <Pane fx:id="userPopup" layoutX="686.0" layoutY="64.0" onMouseExited="#hideUserPopup" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="64.0">
+         <children>
+            <ImageView fitHeight="28.0" fitWidth="34.0" layoutX="80.0" layoutY="-3.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../resources/img/up.png" />
+               </image>
+               <effect>
+                  <DropShadow />
+               </effect>
+            </ImageView>
+            <HBox alignment="CENTER" layoutY="15.0" spacing="3.0" styleClass="popupUser">
+               <children>
+                  <ImageView fitHeight="80.0" fitWidth="78.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../resources/img/user.png" />
+                     </image>
+                     <effect>
+                        <DropShadow />
+                     </effect>
+                  </ImageView>
+                  <Separator orientation="VERTICAL" prefHeight="93.0" prefWidth="1.0" />
+                  <VBox alignment="CENTER" fillWidth="false" spacing="2.0">
+                     <children>
+                        <Label layoutX="22.0" layoutY="14.0" prefHeight="21.0" text="Username">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <Label prefHeight="20.0" text="Magasinier" textFill="#787575">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="38.0" layoutY="31.0" prefHeight="20.0" text="id: G0015" textFill="#787575">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Separator prefHeight="1.0" prefWidth="88.0" style="-fx-background-color: #00796b;" />
+                        <JFXButton prefHeight="25.0" prefWidth="90.0" text="Show more ..." />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+         </children>
+      </Pane>
    </children>
 </AnchorPane>
