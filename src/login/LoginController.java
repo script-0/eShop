@@ -6,7 +6,7 @@
 package login;
 
 import Utils.Internationalization;
-import magasinier.DashboardController;
+import magasinier.dashboard.DashboardController;
 import caissier.FacturationController;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 /**
@@ -60,23 +61,23 @@ public class LoginController implements Initializable {
     ResourceBundle titres;
 
     @FXML
-    void logIn(ActionEvent event) {
+    void logIn() {
         boolean test = asAdmin.isSelected();
         int i = (user.getText().equalsIgnoreCase("cassier"))?1:0;
          try {
-             Stage tmp = (Stage) ((JFXButton)event.getSource()).getScene().getWindow();
+             Stage tmp = (Stage)slogan.getScene().getWindow();
              FXMLLoader loader=null;
              if(test){
                  loader = new FXMLLoader(getClass().getResource("/admin/dashboard.fxml"));
              }else{
-                 loader = new FXMLLoader(getClass().getResource((i==0)?"/magasinier/dashboard.fxml":"/caissier/facturation.fxml"));
+                 loader = new FXMLLoader(getClass().getResource((i==0)?"/magasinier/dashboard/dashboard.fxml":"/caissier/facturation.fxml"));
              }
              Scene newScene = new Scene(loader.load());
              if(test){
                  admin.DashboardController controller= loader.getController();
                  controller.loadResource(langue.getValue());
              }else if(i==0){
-                 magasinier.DashboardController controller = loader.getController();
+                 magasinier.dashboard.DashboardController controller = loader.getController();
                  controller.loadResource(langue.getValue());
              }else{
                  FacturationController controller = loader.getController();
@@ -93,8 +94,7 @@ public class LoginController implements Initializable {
              //controllerUtils.launchTransition(newScene.getRoot());
          } catch (IOException ex) {
              Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
-         }
-        
+         }        
     }
 
     @FXML
@@ -116,7 +116,26 @@ public class LoginController implements Initializable {
         forget.setText(titres.getString("PASSFORGET"));
         asAdmin.setText(titres.getString("LOGINASADMIN"));
         login.setText(titres.getString("LOG"));
+        cgu.setText(titres.getString("CGU"));
     }    
+    
+    @FXML
+    private Label cgu;
+    
+     @FXML
+    void loadCGU() {
+        try {
+             Stage tmp =new Stage();
+             FXMLLoader loader = new FXMLLoader(getClass().getResource("/login/cgu.fxml")) ;
+             Scene newScene = new Scene(loader.load());             
+             tmp.setScene(newScene);
+             tmp.centerOnScreen();
+             tmp.setResizable(false);
+             tmp.show();
+         } catch (IOException ex) {
+             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+         }
+    }
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {

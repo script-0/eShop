@@ -35,7 +35,7 @@
                   </ImageView>
                   <HBox layoutX="188.0" layoutY="43.0" prefHeight="20.0" prefWidth="458.0" styleClass="chemin">
                      <children>
-                        <Label fx:id="lien" prefHeight="20.0" text="Dashboard" textFill="#2196f3">
+                        <Label fx:id="lien" prefHeight="20.0" text="Admin" textFill="#2196f3">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -48,6 +48,14 @@
                               <Image url="@../resources/img/chevron.png" />
                            </image>
                         </ImageView>
+                        <Label fx:id="lien1" layoutX="15.0" layoutY="10.0" prefHeight="20.0" text="Dashboard" textFill="#2196f3">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Label>
                      </children>
                      <padding>
                         <Insets left="5.0" />
@@ -79,35 +87,21 @@
                   <Separator layoutX="83.0" layoutY="119.0" opacity="0.33" prefHeight="0.0" prefWidth="117.0" />
                   <HBox alignment="CENTER" layoutX="32.0" layoutY="178.0" prefHeight="168.0" prefWidth="602.0" spacing="20.0">
                      <children>
-                        <Pane prefHeight="168.0" prefWidth="131.0" styleClass="optionPane">
+                        <Pane onMouseClicked="#loadEmployes" prefHeight="168.0" prefWidth="131.0" styleClass="optionPane">
                            <children>
                               <ImageView fitHeight="120.0" fitWidth="99.0" layoutX="15.0" layoutY="16.0" mouseTransparent="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../resources/img/depot.png" />
+                                    <Image url="@../resources/img/employses_120px.png" />
                                  </image>
                               </ImageView>
-                              <Label fx:id="magasinier" alignment="CENTER" layoutY="126.0" mouseTransparent="true" prefHeight="27.0" prefWidth="131.0" text="Magasinier" textFill="WHITE">
+                              <Label fx:id="employes" alignment="CENTER" layoutY="126.0" mouseTransparent="true" prefHeight="27.0" prefWidth="131.0" text="Employés" textFill="WHITE">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
                               </Label>
                            </children>
                         </Pane>
-                        <Pane layoutX="207.0" layoutY="10.0" prefHeight="168.0" prefWidth="136.0" styleClass="optionPane">
-                           <children>
-                              <ImageView fitHeight="127.0" fitWidth="110.0" layoutX="11.0" layoutY="16.0" mouseTransparent="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../resources/img/checkout.png" />
-                                 </image>
-                              </ImageView>
-                              <Label fx:id="caissier" alignment="CENTER" layoutY="125.0" mouseTransparent="true" prefHeight="27.0" prefWidth="136.0" text="Caissier" textFill="WHITE">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                              </Label>
-                           </children>
-                        </Pane>
-                        <Pane layoutX="270.0" layoutY="10.0" prefHeight="168.0" prefWidth="136.0" styleClass="optionPane">
+                        <Pane layoutX="270.0" layoutY="10.0" onMouseClicked="#loadFactures" prefHeight="168.0" prefWidth="136.0" styleClass="optionPane">
                            <children>
                               <ImageView fitHeight="117.0" fitWidth="111.0" layoutX="12.0" layoutY="13.0" mouseTransparent="true" preserveRatio="true">
                                  <image>
@@ -121,14 +115,14 @@
                               </Label>
                            </children>
                         </Pane>
-                        <Pane layoutX="333.0" layoutY="10.0" prefHeight="168.0" prefWidth="137.0" styleClass="optionPane">
+                        <Pane layoutX="207.0" layoutY="10.0" onMouseClicked="#loadStock" prefHeight="168.0" prefWidth="136.0" styleClass="optionPane">
                            <children>
-                              <ImageView fitHeight="118.0" fitWidth="108.0" layoutX="15.0" layoutY="7.0" mouseTransparent="true" preserveRatio="true">
+                              <ImageView fitHeight="102.0" fitWidth="107.0" layoutX="3.0" layoutY="14.0" mouseTransparent="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../resources/img/statistic.png" />
+                                    <Image url="@../resources/img/stock.png" />
                                  </image>
                               </ImageView>
-                              <Label fx:id="stats" alignment="CENTER" layoutX="-1.0" layoutY="120.0" mouseTransparent="true" prefHeight="27.0" prefWidth="139.0" text="Statistiques" textFill="WHITE">
+                              <Label fx:id="stock" alignment="CENTER" layoutY="125.0" mouseTransparent="true" prefHeight="27.0" prefWidth="136.0" text="Stock" textFill="WHITE">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -173,12 +167,12 @@
                   <DropShadow />
                </effect>
             </Pane>
-            <JFXComboBox fx:id="langue" labelFloat="true" layoutX="293.0" layoutY="48.0" prefHeight="25.0" prefWidth="94.0" promptText="Language" unFocusColor="WHITE">
+            <JFXComboBox fx:id="langue" labelFloat="true" layoutX="259.0" layoutY="42.0" prefHeight="31.0" prefWidth="103.0" promptText="Language" unFocusColor="WHITE">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
             </JFXComboBox>
-            <ImageView fitHeight="36.0" fitWidth="34.0" layoutX="360.0" layoutY="47.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="36.0" fitWidth="34.0" layoutX="360.0" layoutY="44.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../resources/img/translation.png" />
                </image>

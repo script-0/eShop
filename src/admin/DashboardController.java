@@ -17,6 +17,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import login.LoginController;
 
@@ -34,16 +35,13 @@ public class DashboardController implements Initializable{
     @FXML
     private Label question;
 
-    @FXML
     private Label magasinier;
 
-    @FXML
     private Label caissier;
 
     @FXML
     private Label factures;
 
-    @FXML
     private Label stats;
 
     @FXML
@@ -53,6 +51,12 @@ public class DashboardController implements Initializable{
     private JFXComboBox<String> langue;
 
     ResourceBundle titres;
+    @FXML
+    private Label lien1;
+    @FXML
+    private Label employes;
+    @FXML
+    private Label stock;
     
     public void loadResource(String language){
        titres =Internationalization.getBundle(language);
@@ -62,13 +66,14 @@ public class DashboardController implements Initializable{
     public void setResource(){
         slogan.setText(titres.getString("SLOGAN"));
         user.setText(titres.getString("USER"));
-        lien.setText(titres.getString("DASHBOARD"));
+        lien1.setText(titres.getString("DASHBOARD"));
         question.setText(titres.getString("QUESTION"));
         langue.setPromptText(titres.getString("LANG"));
-        magasinier.setText(titres.getString("MAGASINIER"));
-        caissier.setText(titres.getString("CAISSIER"));
-        stats.setText(titres.getString("STATS"));
+        //magasinier.setText(titres.getString("MAGASINIER"));
+        //caissier.setText(titres.getString("CAISSIER"));
+        //stats.setText(titres.getString("STATS"));
         factures.setText(titres.getString("FACTURES"));
+        employes.setText(titres.getString("EMPLOYES"));
     }
     
     @FXML
@@ -94,5 +99,53 @@ public class DashboardController implements Initializable{
         langue.valueProperty().addListener((observable, oldValue, newValue) -> {
             loadResource(newValue);
         });
+    }
+
+    @FXML
+    private void loadGestionnaires() {
+        try {
+             Stage tmp = (Stage)lien.getScene().getWindow();
+             FXMLLoader loader=new FXMLLoader(getClass().getResource("/admin/employes.fxml"));
+             Scene newScene = new Scene(loader.load());
+             GestionnairesController controller = loader.getController();
+             controller.loadResource(langue.getValue());
+             tmp.hide();
+             tmp.setScene(newScene);
+             tmp.show();
+         } catch (IOException ex) {
+             Logger.getLogger(DashboardController.class.getName()).log(Level.SEVERE, null, ex);
+         }
+    }
+
+    @FXML
+    private void loadStock(MouseEvent event) {
+        try {
+             Stage tmp = (Stage)lien.getScene().getWindow();
+             FXMLLoader loader=new FXMLLoader(getClass().getResource("/admin/stock.fxml"));
+             Scene newScene = new Scene(loader.load());
+             StockController controller = loader.getController();
+             controller.loadResource(langue.getValue());
+             tmp.hide();
+             tmp.setScene(newScene);
+             tmp.show();
+         } catch (IOException ex) {
+             Logger.getLogger(StockController.class.getName()).log(Level.SEVERE, null, ex);
+         }
+    }
+
+    @FXML
+    private void loadFactures(MouseEvent event) {
+        try {
+             Stage tmp = (Stage)lien.getScene().getWindow();
+             FXMLLoader loader=new FXMLLoader(getClass().getResource("/admin/factures.fxml"));
+             Scene newScene = new Scene(loader.load());
+             FacturesController controller = loader.getController();
+             controller.loadResource(langue.getValue());
+             tmp.hide();
+             tmp.setScene(newScene);
+             tmp.show();
+         } catch (IOException ex) {
+             Logger.getLogger(DashboardController.class.getName()).log(Level.SEVERE, null, ex);
+         }
     }
 }

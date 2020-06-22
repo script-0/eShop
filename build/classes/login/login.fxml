@@ -5,6 +5,7 @@
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.Group?>
@@ -21,7 +22,7 @@
    <center>
       <Group BorderPane.alignment="CENTER">
          <children>
-            <Pane layoutX="14.0" layoutY="28.0" prefHeight="338.0" prefWidth="580.0" styleClass="rootPane2">
+            <Pane layoutX="14.0" layoutY="28.0" prefHeight="368.0" prefWidth="580.0" styleClass="rootPane2">
                <children>
                   <JFXTextField fx:id="user" alignment="CENTER" focusColor="WHITE" labelFloat="true" layoutX="123.0" layoutY="96.0" prefHeight="39.0" prefWidth="310.0" promptText="Username" styleClass="t" unFocusColor="#2196f3">
                      <font>
@@ -80,6 +81,15 @@
                         <Image url="@../resources/img/translation.png" />
                      </image>
                   </ImageView>
+                  <Label fx:id="cgu" layoutX="208.0" layoutY="331.0" onMouseClicked="#loadCGU" styleClass="link" text="Users Terms">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <graphic>
+                        <FontAwesomeIconView fill="WHITE" glyphName="QUESTION_CIRCLE" size="18" />
+                     </graphic>
+                  </Label>
+                  <Label layoutX="462.0" layoutY="332.0" styleClass="link" text="\@Copyrights-2020" />
                </children>
                <padding>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

@@ -17,7 +17,6 @@ import javafx.util.Duration;
 public class ControllerUtils{
     
      public void launchInterface(String path){
-        
     }
     
     public static void launchTransition( Node b){
