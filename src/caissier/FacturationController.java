@@ -5,18 +5,30 @@
  */
 package caissier;
 
+import Utils.ControllerUtils;
 import Utils.Internationalization;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXToggleButton;
+import dao.EntitiesImpl.ClientImpl;
+import dao.EntitiesImpl.FactureImpl;
+import dao.EntitiesImpl.LigneFactureImpl;
+import dao.EntitiesImpl.ProductImpl;
+import entity.Client;
+import entity.Facture;
+import entity.Lignefacture;
+import entity.Produit;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URL;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;  
 import java.time.LocalDateTime; 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,6 +39,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
@@ -117,19 +130,19 @@ public class FacturationController implements Initializable {
     
 
     @FXML
-    private TableView<Achats> panier;
+    private TableView<Lignefacture> panier;
     
     @FXML
-    private TableColumn<Achats, String> codeCol;
+    private TableColumn<Lignefacture, String> codeCol;
 
     @FXML
-    private TableColumn<Achats, Double> qteCol;
+    private TableColumn<Lignefacture, BigDecimal> qteCol;
 
     @FXML
-    private TableColumn<Achats, Double> prixUCol;
+    private TableColumn<Lignefacture, Double> prixUCol;
 
     @FXML
-    private TableColumn<Achats, Double> prixTCol;
+    private TableColumn<Lignefacture, Double> prixTCol;
 
     
     @FXML
@@ -151,25 +164,43 @@ public class FacturationController implements Initializable {
     @FXML
     private JFXComboBox<String> langue;
 
-    ObservableList<Achats> listAchats = FXCollections.observableArrayList();
+    ObservableList<Lignefacture> listAchats = FXCollections.observableArrayList();
     
     double tmp,tmp2,tmp3;
+    Lignefacture tmpLigneFac=null;
+    double totalValue,montantValue;
+     
+    Produit p;
+    ProductImpl pImpl = new ProductImpl();
+    FactureImpl factureImpl = new FactureImpl();
+    Client client = null;
+    ClientImpl clientImpl  = new ClientImpl();
+    LigneFactureImpl ligneFacImpl = new LigneFactureImpl();
+    
+    Calendar c =Calendar.getInstance();    
+    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+    LocalDateTime now;
+    
     @FXML
-    void add(MouseEvent event) {//Ajoute le nouvel achat a la liste des Achats
-        //apres verification
+    void add(MouseEvent event) {
+        
         if(!quantite.getText().equals("") && !prixP.getText().equals("NaN")){
-            tmp = Double.valueOf(quantite.getText().replace(" ",""));
-            tmp2 =  Double.valueOf(prixP.getText().replace(" ",""));
-            try{
-             tmp3 = Double.valueOf(remise.getText().replace(" ",""));
-            }catch(Exception e){
-                tmp3=0;
+            tmp = Double.valueOf(quantite.getText().replace(" ",""));        
+            
+            System.out.println(">new Achats: ["+codeProduit.getText()+", "+tmp+", "+tmp2+", "+tmp*tmp2+"]");
+            boolean flag = false;
+            for(Lignefacture a:listAchats){
+                if( a.getCode().equals(codeProduit.getText())){
+                    a.setQte( a.getQte().add( BigDecimal.valueOf(tmp) ) );
+                    flag= true;
+                    break;
+                }
             }
-            
-            System.out.println(">new Achats: ["+codeProduit.getText()+", "+tmp+", "+tmp2+", "+tmp*tmp2*(1-tmp3/100)+"]");
-            
-            listAchats.add(new Achats(codeProduit.getText(),tmp,tmp2,tmp*tmp2*(1-tmp3/100)));
-
+            if(!flag){
+                tmpLigneFac = new Lignefacture(0,p.getPrixVente(),BigDecimal.valueOf(tmp),p.getPrixAchat());
+                tmpLigneFac.setCodePro(p);
+                listAchats.add(tmpLigneFac);
+            }
             stock.setText( ""+(Integer.valueOf(stock.getText().replace(" ","")) - Integer.valueOf(quantite.getText().replace(" ",""))));
         }
     }
@@ -177,19 +208,19 @@ public class FacturationController implements Initializable {
     @FXML
     void annuler(ActionEvent event) {
         panier.getItems().clear();
-        
+        clear();
     }
-
+    
+    
     @FXML
-    void apercu(ActionEvent event) {
+    void apercu() {
         try {
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-            LocalDateTime now = LocalDateTime.now();
-            ArrayList<Achats> ticketTmp = new ArrayList();
+            now = LocalDateTime.now();
+            ArrayList<Lignefacture> ticketTmp = new ArrayList();
             listAchats.forEach((t) -> {
                 ticketTmp.add(t);
             });
-            Ticket t = new Ticket(ticketTmp,dtf.format(now),"100033",Double.valueOf(montantRemi.getText().replace(" ","")) );
+            Ticket t = new Ticket(ticketTmp,dtf.format(now),LoginController.gestionnaire.getMatricule(),Double.valueOf(montantRemi.getText().replace(" ","")) );
             t.buildTicket();
             Desktop.getDesktop().open(new File(t.fichierTicket));
         } catch (IOException ex) {
@@ -199,7 +230,7 @@ public class FacturationController implements Initializable {
 
     @FXML
     void categories(ActionEvent event) {
-
+        
     }
 
     @FXML
@@ -236,8 +267,38 @@ public class FacturationController implements Initializable {
     }
 
     @FXML
-    void valider() {
-
+    void valider() {       
+        double rem = 0.0;
+        double totaux = 0.0;
+        for(Lignefacture f:listAchats){
+            totaux+= f.getPrixT();
+        }
+        try{
+            rem = Double.valueOf(remise.getText().replace(" ",""));
+        }catch(NumberFormatException e){
+            ControllerUtils.print("Cannot Format Remise");
+        }
+        
+        now = LocalDateTime.now(); 
+        Facture facture = new Facture(0,
+                                      ControllerUtils.getDate(LocalDate.now()),
+                                      dtf.format(now),
+                                      BigDecimal.valueOf(rem),
+                                      BigDecimal.valueOf(totaux),
+                                      eMoney.isSelected());
+        facture.setIdClient(this.client);
+        facture.setIdCaissiere(LoginController.gestionnaire);
+        facture.setLignefactureList(listAchats.subList(0, listAchats.size()));
+        
+        factureImpl.saveFacture(facture);
+        listAchats.forEach((Lignefacture t) -> {
+            t.setIdFac(facture);
+        });
+        ligneFacImpl.saveLigneFacture(listAchats.subList(0, listAchats.size()));
+        
+        apercu();
+        clear();
+        panier.getItems().clear();
     }
 
     ResourceBundle titres;
@@ -246,7 +307,7 @@ public class FacturationController implements Initializable {
         titres =Internationalization.getBundle(language);
         setResource();
     }
-    
+   
     public void setResource(){
         /*********************** ***********A Faire /*****************************/
     }
@@ -260,8 +321,6 @@ public class FacturationController implements Initializable {
                 reliquat.setText("NaN");
             }
     }
-    
-    double totalValue,montantValue;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         
@@ -269,12 +328,35 @@ public class FacturationController implements Initializable {
             buildReliquat();
         });
         
+        idClient.textProperty().addListener((observable, oldValue, newValue) -> {
+             // si une certaine condition, charge les infos relatives aux produits
+             if(newValue.length() >=7 && newValue.contains("-")){
+                 try{
+                     client = clientImpl.getClientById(Integer.valueOf(newValue.replace("-","")));
+                 }catch(NumberFormatException e){
+                     client = null;
+                 }
+                 if(client==null){
+                     ControllerUtils.showNotification("Eshop[Cassier]","Client[ id =" + newValue+" ] introuvable",true,Pos.BOTTOM_RIGHT,5);
+                 }
+                 
+             }
+        });
+        
         listAchats.addListener((javafx.beans.Observable observable) -> {
             totalValue = 0.0;
             if(!listAchats.isEmpty()){
                 listAchats.forEach((a) -> {
-                    totalValue+=a.getPrixT();
+                    totalValue+= ( a.getPrixVente().multiply(a.getQte()) ).doubleValue();
                 });
+                try{
+                    tmp3 = Double.valueOf(remise.getText().replace(" ",""));
+                }catch(NumberFormatException e){
+                    tmp3=0;
+                }
+                
+                totalValue*=(1-tmp3/100);
+                
                 total.setText(String.format("%.2f",totalValue));
                 net.setText(String.format("%.2f",totalValue));
             }else{
@@ -322,7 +404,6 @@ public class FacturationController implements Initializable {
         model.setSelectionMode(SelectionMode.MULTIPLE);//On peut selectionner plusieurs entrees a la fois
         
         model.selectedItemProperty().addListener((ObservableValue obs, Object oldSelection, Object newSelection) -> {
-            //modify.setDisable((newSelection == null));
             del.setDisable(model.getSelectedItems().isEmpty());
         });
          
@@ -331,60 +412,50 @@ public class FacturationController implements Initializable {
         panier.setItems(null);
         panier.setItems(listAchats);
     }
-    
    
    public void initializeProductInfos(){
          codeProduit.textProperty().addListener((observable, oldValue, newValue) -> {
              // si une certaine condition, charge les infos relatives aux produits
-             if(newValue.equals("000-001")){
-                nomP.setText("Broli-Spaghetti");
-                prixP.setText("1 120");
-                stateP.setText("Bon");
-                dateP.setText("04-06-20");
-                categorieP.setText("Pate Alimentaire");
-                productImg.setImage(new Image("/resources/img/defaultProduct.png"));
-                stock.setText("1000");
-                
-             }else if(newValue.equals("000-002")){
-                nomP.setText("Meme Casse");
-                prixP.setText("1 000");
-                stateP.setText("Bon");
-                dateP.setText("04-06-20");
-                categorieP.setText("Riz Parfume(5kg)");
-                productImg.setImage(new Image("/resources/img/productPerimeP.png"));
-                stock.setText("80");
-                
-             }else if(newValue.equals("000-003")){
-                nomP.setText("Mayor");
-                prixP.setText("1 000");
-                stateP.setText("Perime");
-                dateP.setText("04-06-20");
-                categorieP.setText("Huile raffinee");
-                productImg.setImage(new Image("/resources/img/productPerime.png"));
-                stock.setText("80");
-                
+             if(newValue.length() >=7 && newValue.contains("-")){
+               try{
+                    p  = pImpl.findByCode( Integer.valueOf(newValue.replace("-","")) );
+                    if(p!=null){
+                        nomP.setText(p.getNomPro());
+                        prixP.setText(p.getPrixVente().toString());
+                        stateP.setText("Bon");
+                        dateP.setText(p.getDate());
+                        categorieP.setText(p.getCategorie());
+
+                        if(newValue.equals("300-001")) productImg.setImage(new Image("/resources/img/productPerime.png"));
+                        else if(newValue.equals("300-002"))productImg.setImage(new Image("/resources/img/productPerimeP.png"));
+                        else productImg.setImage(new Image("/resources/img/defaultProduct.png"));
+
+                        c.setTime(p.getDatePeremtion());
+                        stock.setText(p.getFraction()?p.getQte().toString():""+p.getQte().intValue());
+                    }else{
+                        ControllerUtils.print("No Produit Found for id = "+newValue);
+                    }
+               }catch( NumberFormatException e){
+                   ControllerUtils.print("Code Produit Parsing Failed");
+               }
              }else{
-                nomP.setText("");
-                prixP.setText("");
-                stateP.setText("");
-                dateP.setText("");
-                categorieP.setText("");
-                productImg.setImage(null);
-                stock.setText("");
+                 p=null;
+                 clear();
              }
          });
      }   
 
+   public void clear(){
+        nomP.setText("");
+        prixP.setText("");
+        stateP.setText("");
+        dateP.setText("");
+        categorieP.setText("");
+        productImg.setImage(null);
+        stock.setText("");
+   }
+   
    @FXML
-   public void loadApercu() {
-    /*ImageView imgTmp = new ImageView(productImg.getImage());
-    imgTmp.setScaleX(2.5);
-    imgTmp.setScaleY(2.5);
-    Stage tmpS = new Stage( );
-    tmpS.setScene(new Scene((Parent)new Pane( (imgTmp) ) ) );
-    tmpS.initModality(Modality.APPLICATION_MODAL);
-    imgTmp.setOnMouseClicked((e)-> tmpS.close());
-    tmpS.show();*/
-}
+   public void loadApercu() {}
    
 }

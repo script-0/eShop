@@ -11,8 +11,6 @@ import entity.Categorie;
 
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
 
 /**
  *
@@ -42,9 +40,12 @@ public class CategoryImpl implements ICategory {
 
     @Override
     public boolean update(Categorie categorie) {
-        List<Categorie> categories = em.createQuery("select c from Categorie c where c.idCat=:id ").setParameter("id" , categorie.getIdCat()).getResultList();
-        if( categories.isEmpty()) return false ; // la categorie n'existe pas dans le BD
+        /*List<Categorie> categories = em.createQuery("select c from Categorie c where c.idCat=:id ").setParameter("id" , categorie.getIdCat()).getResultList();
+        if( categories.isEmpty()) return false ; // la categorie n'existe pas dans le BD*/
+        em.detach(categorie);
+        em.flush();
         em.merge(categorie);
+        em.flush();
         return true; // La categorie a ete bien mis a jour
     }
 
@@ -53,4 +54,15 @@ public class CategoryImpl implements ICategory {
         return em.createQuery("select c.nomCat from Categorie c").getResultList();
     }
 
+    @Override
+    public Integer findCategoryId(String name) {
+        return (int)em.createQuery("select c.idCat from Categorie c WHERE c.nomCat=:name").setParameter("name" , name).getSingleResult();
+    }
+
+    @Override
+    public Categorie findCategoryByName(String name) {
+        return (Categorie) em.createQuery("select c from Categorie c where c.nomCat=:name").setParameter("name" , name ).getSingleResult();
+    }
+    
+    
 }

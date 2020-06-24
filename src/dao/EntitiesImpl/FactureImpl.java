@@ -25,4 +25,13 @@ public class FactureImpl implements IBill {
         return em.createQuery("select f from Facture f where f.dateFac= :date").setParameter("date", date).getResultList();
     }
     
+    @Override
+    public boolean saveFacture(Facture f) {
+        em.getTransaction().begin();
+        em.merge(f);
+        em.flush();
+        em.getTransaction().commit();
+        return true ;
+    }
+    
 }

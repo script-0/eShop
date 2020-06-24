@@ -5,8 +5,6 @@
  */
 package resources.Ticket_de_caisse;
 
-
-import caissier.Achats;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
@@ -50,6 +48,7 @@ import javax.print.PrintService;
 
 import com.sun.pdfview.PDFFile;
 import com.sun.pdfview.PDFPrintPage;
+import entity.Lignefacture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -63,7 +62,7 @@ import java.util.logging.Logger;
 public class Ticket {
     
       private final String titre = "eShop Ticket";
-      public  ArrayList<Achats> listAchats;
+      public  ArrayList<Lignefacture> listAchats;
       private String TicketEtCaisse = null;
       private String dateTicket = null;
       private String total = " -Total: ";
@@ -79,14 +78,14 @@ public class Ticket {
       
       private void setFichierTicket(String url){ this.fichierTicket = url;}
       
-      public Ticket(ArrayList<Achats> list, String achatDate, String caisseId,double montantR)
+      public Ticket(ArrayList<Lignefacture> list, String achatDate, String caisseId,double montantR)
       { 
             super();
             this.listAchats = list;
             dateTicket = "-"+achatDate;
             TicketEtCaisse = "-"+"Caisse"+caisseId;
             double tmp = 0.0;
-            for(Achats t:listAchats){
+            for(Lignefacture t:listAchats){
                 tmp += t.getPrixT();
             }
             total+= ""+tmp+" XAF";       
@@ -155,7 +154,7 @@ public class Ticket {
            
            PdfPCell cel = null;
            int count = listAchats.size();
-           Achats a;
+           Lignefacture a;
            for(int i= 0; i < count; i++){
             a= listAchats.get(i);
             

@@ -90,4 +90,14 @@ public class ClientImpl implements IClient {
         
     }
     
+    @Override
+    public Client getClientById(int code){
+        try{
+            return (Client) em.createQuery("select c from Client c where c.idClient=:param").setParameter("param" , code).getSingleResult();
+        }catch(Exception e){
+                System.out.println("Client[id="+code+"] introuvable");
+        }
+        return null;
+    }
+    
 }

@@ -99,7 +99,7 @@
       </Pane>
       <Pane layoutX="724.0" layoutY="33.0" onMouseClicked="#showUserPopup" prefHeight="37.0" prefWidth="121.0" AnchorPane.rightAnchor="106.0">
          <children>
-            <Label fx:id="username" layoutY="-7.0" styleClass="username" text="Username" textFill="WHITE">
+            <Label fx:id="username" alignment="CENTER_RIGHT" layoutX="-41.0" layoutY="-7.0" prefHeight="28.0" prefWidth="131.0" styleClass="username" text="Username" textFill="WHITE">
                <font>
                   <Font size="18.0" />
                </font>
@@ -139,18 +139,6 @@
       <Separator layoutX="123.0" layoutY="122.0" opacity="0.46" prefHeight="3.0" prefWidth="474.0" AnchorPane.leftAnchor="123.0" AnchorPane.rightAnchor="118.0" AnchorPane.topAnchor="117.0" />
       <HBox alignment="CENTER" layoutX="70.0" layoutY="106.0" prefWidth="542.0" spacing="80.0" style="-fx-alignment: center;" AnchorPane.leftAnchor="70.0" AnchorPane.rightAnchor="73.0" AnchorPane.topAnchor="100.0">
          <children>
-            <JFXButton fx:id="dashboard" onMouseClicked="#dashboard" ripplerFill="#2196f3" styleClass="b" text="Dashboard">
-               <font>
-                  <Font size="15.0" />
-               </font>
-               <graphic>
-                  <ImageView fitHeight="24.0" fitWidth="23.0">
-                     <image>
-                        <Image url="@../../resources/img/home.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </JFXButton>
             <JFXButton fx:id="categories" layoutX="105.0" layoutY="10.0" ripplerFill="#2196f3" styleClass="bSelected" text="Catégories">
                <font>
                   <Font size="15.0" />
@@ -175,12 +163,16 @@
                   </ImageView>
                </graphic>
             </JFXButton>
-            <JFXButton fx:id="historique" layoutX="563.0" layoutY="10.0" ripplerFill="#2196f3" styleClass="b" text="Historique">
+            <JFXButton fx:id="dashboard" onMouseClicked="#dashboard" ripplerFill="#2196f3" styleClass="b" text="Stats">
                <font>
                   <Font size="15.0" />
                </font>
                <graphic>
-                  <FontAwesomeIconView fill="WHITE" glyphName="HISTORY" size="25" />
+                  <ImageView fitHeight="24.0" fitWidth="23.0">
+                     <image>
+                        <Image url="@../../resources/img/home.png" />
+                     </image>
+                  </ImageView>
                </graphic>
             </JFXButton>
          </children>
@@ -313,7 +305,7 @@
                   <Separator orientation="VERTICAL" prefHeight="93.0" prefWidth="1.0" />
                   <VBox alignment="CENTER" fillWidth="false" spacing="2.0">
                      <children>
-                        <Label layoutX="22.0" layoutY="14.0" prefHeight="21.0" text="Username">
+                        <Label fx:id="nameProfil" layoutX="22.0" layoutY="14.0" prefHeight="21.0" text="Username">
                            <font>
                               <Font size="15.0" />
                            </font>
@@ -323,13 +315,13 @@
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <Label layoutX="38.0" layoutY="31.0" prefHeight="20.0" text="id: G0015" textFill="#787575">
+                        <Label fx:id="idProfil" layoutX="38.0" layoutY="31.0" prefHeight="20.0" text="id: G0015" textFill="#787575">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Label>
                         <Separator prefHeight="1.0" prefWidth="88.0" style="-fx-background-color: #00796b;" />
-                        <JFXButton prefHeight="25.0" prefWidth="90.0" text="Show more ..." />
+                        <JFXButton fx:id="showProfil" prefHeight="25.0" prefWidth="90.0" text="Show more ..." />
                      </children>
                   </VBox>
                </children>

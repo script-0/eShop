@@ -63,7 +63,7 @@ public class GestionnairesController implements Initializable {
     @FXML
     private JFXButton dashboard;
     @FXML
-    private JFXButton employe;
+    private JFXButton gestionnaire;
     @FXML
     private JFXButton factures;
     @FXML
@@ -118,7 +118,6 @@ public class GestionnairesController implements Initializable {
     private ImageView flecheUserPopup;
     @FXML
     private Pagination pagination;
-    GestionnaireImpl impl = new GestionnaireImpl();
     
     
     //*********************************************
@@ -127,6 +126,8 @@ public class GestionnairesController implements Initializable {
     SortedList<Gestionnaire> sortedData ;
     ObservableList<Gestionnaire> elements = FXCollections.observableArrayList();
     FilteredList<Gestionnaire> filteredData;
+    GestionnaireImpl impl = new GestionnaireImpl();
+    
     
     
 
@@ -150,7 +151,23 @@ public class GestionnairesController implements Initializable {
         modify.setDisable(true);
         delete.setDisable(true);
         apercu.setDisable(true);
-        
+    }
+    
+    public void loadResource(String language){
+       titres =Internationalization.getBundle(language);
+       setResource();
+    }
+    
+    public void setResource(){
+    /*    slogan.setText(titres.getString("SLOGAN"));
+        user.setText(titres.getString("USER"));
+        lien.setText(titres.getString("DASHBOARD"));
+        question.setText(titres.getString("QUESTION"));
+        langue.setPromptText(titres.getString("LANG"));
+        magasinier.setText(titres.getString("MAGASINIER"));
+        caissier.setText(titres.getString("CAISSIER"));
+        stats.setText(titres.getString("STATS"));
+        factures.setText(titres.getString("FACTURES"));*/
     }
 
     @FXML
@@ -222,23 +239,34 @@ public class GestionnairesController implements Initializable {
              Logger.getLogger(StockController.class.getName()).log(Level.SEVERE, null, ex);
          }
     }
-
-    @FXML
-    private void refresh(ActionEvent event) {
-        
-    }
-
-
-    @FXML
-    private void tableViewClicked(MouseEvent event) {
-        
-    }
-
-    @FXML
-    private void initSearchPane() {
-        searchTextField.clear();
-        searchButton.setVisible(true);
-        stopSearchButton.setVisible(false);
+    
+    void launchEditGestionnaire(int p){
+        try {
+             Stage tmp = new Stage();
+             //tmp.initStyle(StageStyle.UNDECORATED);
+             tmp.initModality(Modality.APPLICATION_MODAL);
+             FXMLLoader loader=new FXMLLoader(getClass().getResource("/admin/editGestionnaire.fxml"));
+             
+             Pane pane = (StackPane)loader.load();
+             EditGestionnaireController con = loader.getController();
+             con.setItems(listGestionnaires);
+             if(p!=-1){
+                 con.loadData(p);
+             }else{
+                 con.setType(true);
+                 con.initMatricule();
+             }
+             
+             Scene newScene = new Scene(pane);
+             tmp.setScene(newScene);             
+             /*tmp.setWidth(453);
+             tmp.setHeight(555);*/
+             tmp.setResizable(false);             
+             tmp.showAndWait();
+             ControllerUtils.launchTransition(pane);
+         } catch (IOException ex) {
+             Logger.getLogger(EditGestionnaireController.class.getName()).log(Level.SEVERE, null, ex);
+         }
     }
 
     @FXML
@@ -255,7 +283,7 @@ public class GestionnairesController implements Initializable {
 
     @FXML
     private void delete() {
-        ObservableList<Gestionnaire> items, allGestionnaires;
+        ObservableList<Gestionnaire> items;
          items = tableView.getSelectionModel().getSelectedItems();
          if(items == null)
          {
@@ -263,11 +291,18 @@ public class GestionnairesController implements Initializable {
          }else{
               //**supprimer l'enregistrement selectionne
              //**Retirer a la tableView
-             items.forEach(listGestionnaires::remove);
-             deleteFromBD(items);
+             if(impl.deleteFromBD(items)) items.forEach(listGestionnaires::remove);
              initPagination();            
         }
     }
+    
+    @FXML
+    private void refresh() {
+        listGestionnaires = FXCollections.observableArrayList(readFromBD());
+        initPagination();
+    }
+
+
     
     @FXML
     private void loadViewGestionnaire() {
@@ -292,13 +327,6 @@ public class GestionnairesController implements Initializable {
          }
         initPagination();
     }
-    /********** DELETE_MONTHE *************/
-    
-    public void deleteFromBD(ObservableList<Gestionnaire> e) {
-        
-    }
-
-    /********       ***************/
     
     @FXML
     private void afficherPopup(ActionEvent event) {
@@ -327,21 +355,28 @@ public class GestionnairesController implements Initializable {
     
     //**************************************
     
-    public void loadResource(String language){
-       titres =Internationalization.getBundle(language);
-       setResource();
+    void initSearch(){
+        searchColumn.getItems().addAll(titres.getString("MAT"),  titres.getString("NAME"),
+                                                "Type",
+                                                "Email",
+                                                "Contact",
+                                                titres.getString("ADDRESS"),
+                                                titres.getString("USERNAME"),
+                                                titres.getString("PASS"),
+                                                titres.getString("ACTIVE"));
+        searchColumn.setValue(titres.getString("MAT"));
+        initSearchPane();
+        searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            stopSearchButton.setVisible(!newValue.isEmpty());
+            searchButton.setVisible(newValue.isEmpty());
+        });
     }
     
-    public void setResource(){
-    /*    slogan.setText(titres.getString("SLOGAN"));
-        user.setText(titres.getString("USER"));
-        lien.setText(titres.getString("DASHBOARD"));
-        question.setText(titres.getString("QUESTION"));
-        langue.setPromptText(titres.getString("LANG"));
-        magasinier.setText(titres.getString("MAGASINIER"));
-        caissier.setText(titres.getString("CAISSIER"));
-        stats.setText(titres.getString("STATS"));
-        factures.setText(titres.getString("FACTURES"));*/
+    @FXML
+    private void initSearchPane() {
+        searchTextField.clear();
+        searchButton.setVisible(true);
+        stopSearchButton.setVisible(false);
     }
     
     public void initializeTableView(){
@@ -384,92 +419,12 @@ public class GestionnairesController implements Initializable {
         
         loadGestionnaireData();
     }
-        
-    void initSearch(){
-        searchColumn.getItems().addAll(titres.getString("MAT"),  titres.getString("NAME"),
-                                                "Type",
-                                                "Email",
-                                                "Contact",
-                                                titres.getString("USERNAME"),
-                                                titres.getString("PASS"),
-                                                titres.getString("ACTIVE"));
-        searchColumn.setValue(titres.getString("MAT"));
-        initSearchPane();
-        searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            stopSearchButton.setVisible(!newValue.isEmpty());
-            searchButton.setVisible(newValue.isEmpty());
-        });
-    }
     
-    
-    
-    void launchEditGestionnaire(int p){
-        try {
-             Stage tmp = new Stage();
-             //tmp.initStyle(StageStyle.UNDECORATED);
-             tmp.initModality(Modality.APPLICATION_MODAL);
-             FXMLLoader loader=new FXMLLoader(getClass().getResource("/admin/editGestionnaire.fxml"));
-             
-             Pane pane = (StackPane)loader.load();
-             EditGestionnaireController con = loader.getController();
-             con.setItems(listGestionnaires);
-             if(p!=-1){
-                 con.loadData(p);
-             }else{
-                 con.setType(true);
-             }
-             
-             Scene newScene = new Scene(pane);
-             tmp.setScene(newScene);             
-             /*tmp.setWidth(453);
-             tmp.setHeight(555);*/
-             tmp.setResizable(false);             
-             tmp.showAndWait();
-             ControllerUtils.launchTransition(pane);
-         } catch (IOException ex) {
-             Logger.getLogger(EditGestionnaireController.class.getName()).log(Level.SEVERE, null, ex);
-         }
-    }
-    
-    void initPagination(){
-        if(sortedData.isEmpty()) {
-            pagination.setPageCount(0);
-            pagination.setCurrentPageIndex(0);
-            pagination.setMaxPageIndicatorCount(0);
-            tableView.getItems().clear();
-            return;
-        }
-        int tmp =  (int)Math.ceil(sortedData.size()/5.0);
-        pagination.setPageCount(tmp);
-        pagination.setCurrentPageIndex(pagination.getCurrentPageIndex());
-        pagination.setMaxPageIndicatorCount(tmp);
-        tableView.getItems().clear();
-
-        int f = 5;
-        if(f >= sortedData.size()) { System.out.println("f>=taille");f = sortedData.size();}
-
-        tableView.getItems().addAll(sortedData.subList(0, f));
-        pagination.setPageFactory((param) -> {
-        tableView.getItems().clear();
-        int fin = 5*param+5;
-        if(fin >= sortedData.size()) fin = sortedData.size();
-
-        if(sortedData.size()>5*param) tableView.getItems().addAll(sortedData.subList(5*param, fin));
-
-        return this.tableView;
-        });            
-   }
-    
-    /*********** READ_MONTHE **********/
     public List<Gestionnaire> readFromBD() {
         // Lire les employes de la BD et les mettre dans l'observableList "element"
         return impl.readFromBD();
     }
-    
-    public void updateBD(Gestionnaire liste) {
-        impl.loadOnBD(liste);
-        listGestionnaires = FXCollections.observableArrayList(readFromBD());
-    }
+ 
     
     public void loadGestionnaireData(){        
         tableView.setItems(elements);
@@ -556,9 +511,40 @@ public class GestionnairesController implements Initializable {
         
         /*//Sauvegarde le plus grand Id pour les ajouts futurs
         maxId = listSuppliers.get(listSuppliers.size()-1).getId();*/
-        
     }
+    
+    void initPagination(){
+        if(sortedData.isEmpty()) {
+            pagination.setPageCount(0);
+            pagination.setCurrentPageIndex(0);
+            pagination.setMaxPageIndicatorCount(0);
+            tableView.getItems().clear();
+            return;
+        }
+        int tmp =  (int)Math.ceil(sortedData.size()/5.0);
+        pagination.setPageCount(tmp);
+        pagination.setCurrentPageIndex(pagination.getCurrentPageIndex());
+        pagination.setMaxPageIndicatorCount(tmp);
+        tableView.getItems().clear();
 
+        int f = 5;
+        if(f >= sortedData.size()) { System.out.println("f>=taille");f = sortedData.size();}
+
+        tableView.getItems().addAll(sortedData.subList(0, f));
+        pagination.setPageFactory((param) -> {
+        tableView.getItems().clear();
+        int fin = 5*param+5;
+        if(fin >= sortedData.size()) fin = sortedData.size();
+
+        if(sortedData.size()>5*param) tableView.getItems().addAll(sortedData.subList(5*param, fin));
+
+        return this.tableView;
+        });            
+   }
+
+    @FXML
+    private void tableViewClicked(MouseEvent event) {
+    }
 
 }
     

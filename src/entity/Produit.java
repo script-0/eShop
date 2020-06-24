@@ -7,10 +7,9 @@ package entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Collection;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,16 +19,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Stephen
+ * @author Isaac
  */
 @Entity
 @Table(name = "produit")
@@ -48,6 +46,10 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Produit.findByActif", query = "SELECT p FROM Produit p WHERE p.actif = :actif")
     , @NamedQuery(name = "Produit.findByFraction", query = "SELECT p FROM Produit p WHERE p.fraction = :fraction")})
 public class Produit implements Serializable {
+
+    @JoinColumn(name = "categorie_idCat", referencedColumnName = "idCat")
+    @ManyToOne(optional = false)
+    private Categorie categorieidCat;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -74,6 +76,7 @@ public class Produit implements Serializable {
     @Basic(optional = false)
     @Column(name = "codeFour")
     private String codeFour;
+    @Basic(optional = false)
     @Column(name = "dateInsertion")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateInsertion;
@@ -87,14 +90,10 @@ public class Produit implements Serializable {
     @Basic(optional = false)
     @Column(name = "fraction")
     private boolean fraction;
-    @JoinColumn(name = "categorie_idCat", referencedColumnName = "idCat")
-    @ManyToOne(optional = false)
-    private Categorie categorieidCat;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codePro")
-    private Collection<Gestionstock> gestionstockCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codePro")
-    private Collection<Lignefacture> lignefactureCollection;
 
+    @Transient
+    private String date;
+    
     public Produit() {
     }
 
@@ -102,7 +101,7 @@ public class Produit implements Serializable {
         this.codePro = codePro;
     }
 
-    public Produit(Integer codePro, String nomPro, BigDecimal prixVente, BigDecimal prixAchat, BigDecimal qte, String description, String codeFour, Date datePeremtion, boolean actif, boolean fraction) {
+    public Produit(Integer codePro, String nomPro, BigDecimal prixVente, BigDecimal prixAchat, BigDecimal qte, String description, String codeFour, Date dateInsertion, Date datePeremtion, boolean actif, boolean fraction) {
         this.codePro = codePro;
         this.nomPro = nomPro;
         this.prixVente = prixVente;
@@ -110,6 +109,7 @@ public class Produit implements Serializable {
         this.qte = qte;
         this.description = description;
         this.codeFour = codeFour;
+        this.dateInsertion = dateInsertion;
         this.datePeremtion = datePeremtion;
         this.actif = actif;
         this.fraction = fraction;
@@ -121,8 +121,20 @@ public class Produit implements Serializable {
 
     public void setCodePro(Integer codePro) {
         this.codePro = codePro;
+    }    
+    
+    public String getCode(){
+        return codePro.toString().substring(0, 3) + "-" + codePro.toString().substring(3, 6);        
     }
 
+    public String getEtat(){
+        return fraction?"enabled":"disabled";
+    }
+    
+    public String getCategorie(){
+        return categorieidCat.getIdCat().toString().substring(0, 3) + "-" + categorieidCat.getIdCat().toString().substring(3, 6);
+    }
+    
     public String getNomPro() {
         return nomPro;
     }
@@ -182,6 +194,10 @@ public class Produit implements Serializable {
     public Date getDatePeremtion() {
         return datePeremtion;
     }
+    
+    public String getDate(){
+        return new SimpleDateFormat("dd-MM-yyyy").format(datePeremtion);
+    }
 
     public void setDatePeremtion(Date datePeremtion) {
         this.datePeremtion = datePeremtion;
@@ -201,32 +217,6 @@ public class Produit implements Serializable {
 
     public void setFraction(boolean fraction) {
         this.fraction = fraction;
-    }
-
-    public Categorie getCategorieidCat() {
-        return categorieidCat;
-    }
-
-    public void setCategorieidCat(Categorie categorieidCat) {
-        this.categorieidCat = categorieidCat;
-    }
-
-    @XmlTransient
-    public Collection<Gestionstock> getGestionstockCollection() {
-        return gestionstockCollection;
-    }
-
-    public void setGestionstockCollection(Collection<Gestionstock> gestionstockCollection) {
-        this.gestionstockCollection = gestionstockCollection;
-    }
-
-    @XmlTransient
-    public Collection<Lignefacture> getLignefactureCollection() {
-        return lignefactureCollection;
-    }
-
-    public void setLignefactureCollection(Collection<Lignefacture> lignefactureCollection) {
-        this.lignefactureCollection = lignefactureCollection;
     }
 
     @Override
@@ -252,6 +242,14 @@ public class Produit implements Serializable {
     @Override
     public String toString() {
         return "entity.Produit[ codePro=" + codePro + " ]";
+    }
+
+    public Categorie getCategorieidCat() {
+        return categorieidCat;
+    }
+
+    public void setCategorieidCat(Categorie categorieidCat) {
+        this.categorieidCat = categorieidCat;
     }
     
 }

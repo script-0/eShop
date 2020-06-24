@@ -165,7 +165,7 @@
                   </ImageView>
                </graphic>
             </JFXButton>
-            <JFXButton fx:id="employes" layoutX="105.0" layoutY="10.0" onAction="#loadEmployes" ripplerFill="#2196f3" styleClass="b" text="Employés">
+            <JFXButton fx:id="employes" layoutX="105.0" layoutY="10.0" onAction="#loadGestionnaires" ripplerFill="#2196f3" styleClass="b" text="Employés">
                <font>
                   <Font size="15.0" />
                </font>

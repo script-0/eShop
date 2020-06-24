@@ -47,8 +47,12 @@ public class DashboardController implements Initializable {
     @FXML
     private Label slogan;
 
+   /**********************        *     */
+
     @FXML
     private Label username;
+    
+    /*********************************************/
 
     @FXML
     private JFXButton dashboard;
@@ -78,7 +82,6 @@ public class DashboardController implements Initializable {
         /************************************ A Compler ****************/
         lien.setText(titres.getString("MAGASINIER"));
         lien1.setText(titres.getString("DASHBOARD"));
-        username.setText(titres.getString("USER"));
         dashboard.setText(titres.getString("DASHBOARD"));
         produits.setText(titres.getString("PRODUITS"));
         categories.setText(titres.getString("CATEGORY"));
@@ -166,6 +169,10 @@ public class DashboardController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         
         titres = Internationalization.initLanguage(langue);
+        
+        
+        Utils.ControllerUtils.setProfil(username,null,null,null);
+        
         langue.valueProperty().addListener((observable, oldValue, newValue) -> {
             loadResource(newValue);
         });

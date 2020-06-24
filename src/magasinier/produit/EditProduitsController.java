@@ -5,6 +5,8 @@
  */
 package magasinier.produit;
 
+import Utils.ControllerUtils;
+import static Utils.ControllerUtils.print;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
@@ -17,15 +19,23 @@ import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXToggleButton;
+import dao.EntitiesImpl.CategoryImpl;
+import dao.EntitiesImpl.GestionStockImpl;
+import dao.EntitiesImpl.ProductImpl;
+import entity.Gestionstock;
+import entity.Produit;
+import java.math.BigDecimal;
+import java.util.Date;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import javafx.beans.Observable;
+import java.time.ZoneId;
+import java.util.Calendar;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import javafx.util.StringConverter;
+import login.LoginController;
 
 /**
  * FXML Controller class
@@ -88,37 +98,100 @@ public class EditProduitsController implements Initializable {
     @FXML
     private JFXComboBox<String> categorie;
 
+    CategoryImpl catImpl =  new CategoryImpl();
+    ProductImpl proImpl = new ProductImpl();
+    GestionStockImpl stockImpl = new GestionStockImpl();
+    
     @FXML
     void annuler() {
         close();
     }
-    
+    Calendar c =Calendar.getInstance();
     @FXML
-    void valider() {
-        Produits p = new Produits(code.getText(),
-                                nom.getText(),
-                                Double.valueOf(prixV.getText()), 
-                                Double.valueOf(prixA.getText()),
-                                Double.valueOf(quantite.getText()),
-                                description.getText(),
-                                fournisseur.getText(),
-                                date.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")),
-                                (actif.isSelected()?"Enabled":"Disabled"),
-                                categorie.getValue());
+    void valider() {        
+        Produit p = null;
+        Gestionstock stock = null;
+        //Changement de la categorie du produit
         if(index == -1){
 /***1 ************Enregistrer ce produit dans la BD *****************/
-            sortedData.add(p);
+           p = new Produit( 0,
+                            nom.getText(),
+                            BigDecimal.valueOf(Double.valueOf(prixV.getText())),
+                            BigDecimal.valueOf(Double.valueOf(prixA.getText())),
+                            BigDecimal.valueOf(0),
+                            description.getText(),
+                            fournisseur.getText().replace("-",""),
+                            c.getTime(), 
+                            ControllerUtils.getDate(date.getValue()), 
+                            true,
+                            actif.isSelected());
+           p.setCategorieidCat(catImpl.findCategoryByName( categorie.getValue() ));
+           
+           if(proImpl.save(p)){
+               sortedData.add(p);
+               System.out.println("Added "+p.getCategorieidCat());
+               Utils.ControllerUtils.showNotification("Eclipse Link - JPA[MySql Connection]","Product Added successfuly: [id ="+p.getCode()+"]",false,Pos.BOTTOM_RIGHT,5);
+           }else{
+               System.out.println("Add failed "+p.getCategorieidCat());
+               Utils.ControllerUtils.showNotification("Eclipse Link - JPA[MySql Connection]","Adding Product failed",false,Pos.BOTTOM_RIGHT,5);
+           }
+           
         }else{
-            
+               p = sortedData.get(index);
+               BigDecimal qte = p.getQte();
+               
+               getData(p);
+               
+               qte = qte.subtract(p.getQte());
+               int operation = qte.compareTo(BigDecimal.ZERO);
+               if(operation == -1){ //Cas d'un retrait
+                   stock = new Gestionstock(0,
+                                            qte.abs(),
+                                            c.getTime(),
+                                            false);
+               }else if(operation == 1){ //Cas d'un ajout
+                    stock = new Gestionstock(0,
+                                            qte,
+                                            c.getTime(),
+                                            true);
+               }else{ }
+               
+               if(stock != null){
+                   stock.setCodePro(p);
+                   stock.setIdGest(LoginController.gestionnaire);
+                   if(stockImpl.addGestionStock(stock)){
+                       print(" Modifications saved on B.D[Getionstock]");
+                   }
+               }
 /***2 ********** Modifier ce produit dans la BD *********************/
-            sortedData.set(index,p);
+                if(proImpl.update(p)){
+                    sortedData.set(index,p);
+                    System.out.println("Updated "+p.getCategorieidCat());
+                    ControllerUtils.showNotification("Eclipse Link - JPA[MySql Connection]","Product Updated successfuly: [id ="+p.getCode()+"]",false,Pos.BOTTOM_RIGHT,5);
+                }else {
+                    ControllerUtils.showNotification("Eclipse Link - JPA[MySql Connection]","Updating Product successfuly: [id ="+p.getCode()+"]",false,Pos.BOTTOM_RIGHT,5);
+                    System.out.println("Update failed "+p.getCategorieidCat());
+                }
         }
         close();
     }   
     
+    public void getData(Produit p){
+        p.setNomPro(nom.getText());
+        p.setPrixAchat(BigDecimal.valueOf(Double.valueOf(prixA.getText())) );
+        p.setPrixVente(BigDecimal.valueOf(Double.valueOf(prixV.getText())) );
+        p.setQte(BigDecimal.valueOf(Double.valueOf(quantite.getText())));
+        p.setDescription(description.getText());
+        p.setCodeFour(fournisseur.getText().replace("-",""));
+        p.setDatePeremtion( Date.from(date.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()) );
+        p.setFraction(actif.isSelected());   
+        p.setCategorieidCat(catImpl.findCategoryByName(categorie.getValue()));
+    }
+    
+    
     public void loadCategories(){
 /***3 ******************** Charger les noms de categories dans categorie.getItems *********/
-        categorie.getItems().addAll("Agro-Alimentaire","Electro-Menager","Cosmetique","Autres");
+        categorie.getItems().addAll(catImpl.findCategoryName());
     }
     
     public void setType(Boolean b){
@@ -133,28 +206,26 @@ public class EditProduitsController implements Initializable {
         }
     }
     
-    ObservableList<Produits> sortedData ;
+    ObservableList<Produit> sortedData ;
     int index = -1;
     
-    public void setItems(ObservableList<Produits> items){
+    public void setItems(ObservableList<Produit> items){
         sortedData = items;
     }
     
     public void loadData(int i){
         index = i;
-        Produits p = sortedData.get(i);
+        Produit p = sortedData.get(i);
         code.setText(p.getCode());
-        nom.setText(p.getName());
+        nom.setText(p.getNomPro());
         quantite.setText(String.valueOf( p.getQte() ) );
-        fournisseur.setText(p.getFournisseur());
-        actif.setSelected(true);
-        prixA.setText( String.valueOf( p.getPrixA() ) );
-        prixV.setText( String.valueOf( p.getPrixV() ) );
-        String[] tmp = p.getDate().split("-");
-        date.setValue( LocalDate.of(Integer.valueOf(tmp[2]), Integer.valueOf(tmp[1]), Integer.valueOf(tmp[0])) );
+        fournisseur.setText(Utils.ControllerUtils.castId(Integer.valueOf(p.getCodeFour())) );
+        prixA.setText( String.valueOf( p.getPrixAchat() ) );
+        prixV.setText( String.valueOf( p.getPrixVente() ) );
+        date.setValue( ControllerUtils.getLocalDate(p.getDatePeremtion()) );
         description.setText(p.getDescription());
-        actif.setSelected(p.getEtat().equalsIgnoreCase("enabled"));
-        categorie.setValue(p.getCategorie());
+        actif.setSelected(p.getFraction());
+        categorie.setValue(p.getCategorieidCat().getNomCat());
     }
     
     @Override
@@ -174,33 +245,11 @@ public class EditProduitsController implements Initializable {
         loadCategories();
         
         code.setDisable(true);
+        code.setText(ControllerUtils.castId(proImpl.findMaxId()));
+        actif.setText("Fractionable");
         
+        ControllerUtils.changeLocaleOfDate(date);
     }    
-    
-    void changeLocaleOfDate(){
-        date.setConverter(new StringConverter<LocalDate>()
-        {
-            private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
-
-            @Override
-            public String toString(LocalDate localDate)
-            {
-                if(localDate==null)
-                    return "";
-                return dateTimeFormatter.format(localDate);
-            }
-
-            @Override
-            public LocalDate fromString(String dateString)
-            {
-                if(dateString==null || dateString.trim().isEmpty())
-                {
-                    return null;
-                }
-                return LocalDate.parse(dateString,dateTimeFormatter);
-            }
-        });
-    }
     
     @FXML void close(){
         Stage tmp = (Stage)lien.getScene().getWindow();

@@ -5,8 +5,7 @@
  */
 package magasinier.categorie;
 
-import magasinier.produit.Produits;
-
+import entity.Produit;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -33,7 +32,7 @@ public class ElementsController implements Initializable{
     @FXML
     private Label code;
     
-    ArrayList<Produits> listProduits;
+    ArrayList<Produit> listProduits;
     
     @FXML
     void remove() {
@@ -46,12 +45,12 @@ public class ElementsController implements Initializable{
     
     int index;
     
-    public void loadData(ArrayList<Produits> a,int d,ViewCategoriesController  c){
+    public void loadData(ArrayList<Produit> a,int d,ViewCategoriesController  c){
         this.v = c;
         this.listProduits=a;
         this.index = d;
-        nom.setText(a.get(index).getName());
-        code.setText(a.get(index).getCode()+" ("+a.get(index).getPrixV()+" FCFA)");
+        nom.setText(a.get(index).getNomPro());
+        code.setText(a.get(index).getCode()+" ("+a.get(index).getPrixVente()+" FCFA)");
         // img
     }
     

@@ -8,6 +8,7 @@ package dao;
 
 import entity.Categorie;
 import entity.Produit;
+import java.math.BigDecimal;
 
 import java.util.List;
 
@@ -20,6 +21,6 @@ public interface ICategory {
     public boolean save(Categorie categorie);
     public boolean update(Categorie categorie);
     public List<String> findCategoryName();
-
-    
+    public Integer findCategoryId(String name);
+    public Categorie findCategoryByName(String name);
 }

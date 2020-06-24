@@ -12,6 +12,7 @@ package magasinier.produit;
 
 import Utils.ControllerUtils;
 import com.jfoenix.controls.JFXButton;
+import entity.Produit;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -30,7 +31,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import magasinier.produit.Produits;
 
 public class ViewProduitsController implements Initializable{
     
@@ -57,7 +57,7 @@ public class ViewProduitsController implements Initializable{
     @FXML
     private Pagination pagination;
     
-    ObservableList<Produits> items ;
+    ObservableList<Produit> items ;
     
      @FXML
     private JFXButton modify;
@@ -66,7 +66,6 @@ public class ViewProduitsController implements Initializable{
     void modify(){
         try {
              Stage tmp = new Stage();
-             //tmp.initStyle(StageStyle.UNDECORATED);
              tmp.initModality(Modality.APPLICATION_MODAL);
              FXMLLoader loader=new FXMLLoader(getClass().getResource("/magasinier/produit/editProduits.fxml"));
              
@@ -83,6 +82,7 @@ public class ViewProduitsController implements Initializable{
          } catch (IOException ex) {
              Logger.getLogger(ProduitsController.class.getName()).log(Level.SEVERE, null, ex);
          }
+        loadData(pagination.getCurrentPageIndex());
     }
     
     @Override
@@ -96,15 +96,15 @@ public class ViewProduitsController implements Initializable{
     }
 
     public void loadData(int i){
-        Produits p = items.get(i);
-        nom.setText(p.getName());
+        Produit p = items.get(i);
+        nom.setText(p.getNomPro());
         code.setText(p.getCode());
-        prix.setText(""+p.getPrixV());
+        prix.setText(""+p.getPrixVente());
         quantite.setText(""+p.getQte());
         categorie.setText(p.getCategorie());
     }
     
-    public void setup(ObservableList<Produits> list, int selectedIndex){
+    public void setup(ObservableList<Produit> list, int selectedIndex){
         this.items = list;
         pagination.setPageCount(list.size());
         pagination.setCurrentPageIndex(selectedIndex);

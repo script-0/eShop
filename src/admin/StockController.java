@@ -9,8 +9,11 @@ import Utils.Internationalization;
 import static admin.FacturesController.listFactures;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
+import dao.EntitiesImpl.GestionStockImpl;
+import entity.Gestionstock;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,6 +38,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+
 /**
  * FXML Controller class
  *
@@ -57,33 +61,29 @@ public class StockController implements Initializable {
     @FXML
     private JFXButton dashboard;
     @FXML
-    private JFXButton employes;
-    @FXML
     private JFXButton facture;
     @FXML
     private JFXButton stock;
     @FXML
     private JFXButton refresh;
     @FXML
-    private JFXButton print;
-    @FXML
     private TextField searchTextField;
     @FXML
     private JFXButton searchButton;
     @FXML
-    private TableView<GestionStock> tableView;
+    private TableView<Gestionstock> tableView;
     @FXML
-    private TableColumn<GestionStock, String> codeStockCol;
+    private TableColumn<Gestionstock, String> codeStockCol;
     @FXML
-    private TableColumn<GestionStock, Integer> quantiteCol;
+    private TableColumn<Gestionstock, String> qteCol;
     @FXML
-    private TableColumn<GestionStock, String> dateCol;
+    private TableColumn<Gestionstock, String> dateCol;
     @FXML
-    private TableColumn<GestionStock, String> operationCol;
+    private TableColumn<Gestionstock, String> operationCol;
     @FXML
-    private TableColumn<GestionStock, String> employeCol;
+    private TableColumn<Gestionstock, String> gestionnaireCol;
     @FXML
-    private TableColumn<GestionStock, String> produitCol;
+    private TableColumn<Gestionstock, String> produitCol;
     @FXML
     private Label searchBy;
     @FXML
@@ -97,6 +97,10 @@ public class StockController implements Initializable {
     @FXML
     private JFXButton stopSearchButton;
     @FXML
+    private JFXButton gestionnaire;
+    @FXML
+    private JFXButton apercu;
+    @FXML
     private Pane userPopup;
     @FXML
     private Label lien2;
@@ -107,10 +111,11 @@ public class StockController implements Initializable {
     //************************************
     
     ResourceBundle titres;
-    ObservableList<Facture> elements = FXCollections.observableArrayList();
-    static ObservableList<GestionStock> listStock = FXCollections.observableArrayList();
-    FilteredList<GestionStock> filteredData;
-    SortedList<GestionStock> sortedData;
+    ObservableList<Gestionstock> elements = FXCollections.observableArrayList();
+    static ObservableList<Gestionstock> listStock = FXCollections.observableArrayList();
+    FilteredList<Gestionstock> filteredData;
+    SortedList<Gestionstock> sortedData;
+    GestionStockImpl impl = new GestionStockImpl();
     
 
     /**
@@ -176,7 +181,7 @@ public class StockController implements Initializable {
     private void loadGestionnaires() {
         try {
              Stage tmp = (Stage)lien.getScene().getWindow();
-             FXMLLoader loader=new FXMLLoader(getClass().getResource("/admin/employes.fxml"));
+             FXMLLoader loader=new FXMLLoader(getClass().getResource("/admin/gestionnaire.fxml"));
              Scene newScene = new Scene(loader.load());
              GestionnairesController controller = loader.getController();
              controller.loadResource(langue.getValue());
@@ -207,22 +212,22 @@ public class StockController implements Initializable {
     
     public void initializeTableView(){
         //code Column
-         codeStockCol.setCellValueFactory(new PropertyValueFactory<>("codeStock"));
+         codeStockCol.setCellValueFactory(new PropertyValueFactory<>("idStock"));
         
         //quantite Column
-        quantiteCol.setCellValueFactory(new PropertyValueFactory<>("qte"));
+        qteCol.setCellValueFactory(new PropertyValueFactory<>("qte"));
         
         //type Column
-        dateCol.setCellValueFactory(new PropertyValueFactory<>("date"));
+        dateCol.setCellValueFactory(new PropertyValueFactory<>("dateStock"));
         
         //email Column
         operationCol.setCellValueFactory(new PropertyValueFactory<>("operation"));
         
         //contact Column
-        employeCol.setCellValueFactory(new PropertyValueFactory<>("employe"));
+        gestionnaireCol.setCellValueFactory(new PropertyValueFactory<>("idGest"));
        
         //adresse column
-        produitCol.setCellValueFactory(new PropertyValueFactory<>("produit"));
+        produitCol.setCellValueFactory(new PropertyValueFactory<>("codePro"));
 
         
         /*TableView.TableViewSelectionModel model = tableView.getSelectionModel();
@@ -234,31 +239,36 @@ public class StockController implements Initializable {
          
         tableView.setPlaceholder(new Label(titres.getString("STOCK_PLACE_HOLDER")));
         
-        refresh();
+        loadStockData();
     }
     
+    
+    public List<Gestionstock> readFromBD() {
+        // Lire les employes de la BD et les mettre dans l'observableList "element"
+        return impl.readFromBD();
+    }
 
     @FXML
-    private void refresh() {
+    private void loadStockData() {
         // Lire les éléments dans la BD et remplire dans l'observableList elements
-        
+        listStock = FXCollections.observableArrayList(readFromBD());
         
         //----------------------- Alternative -----------------------------------
-        listStock.add(new GestionStock("909001", 15, "06-05-2020", "Ajout", "55501", "888802"));
-        listStock.add(new GestionStock("909015", 03, "16-01-2020", "Ajout", "55556", "888856"));
-        listStock.add(new GestionStock("909023", 06, "18-03-2020", "Retrait", "55524", "888889"));
+       /* listStock.add(new Gestionstock("909001", 15, "06-05-2020", "Ajout", "55501", "888802"));
+        listStock.add(new Gestionstock("909015", 03, "16-01-2020", "Ajout", "55556", "888856"));
+        listStock.add(new Gestionstock("909023", 06, "18-03-2020", "Retrait", "55524", "888889"));
         
-        listStock.add(new GestionStock("909028", 16, "26-04-2020", "Ajout", "55513", "888842"));
-        listStock.add(new GestionStock("909032", 12, "07-06-2020", "Retrait", "55523", "888863"));
-        listStock.add(new GestionStock("909055", 25, "14-02-2020", "Retrait", "55536", "888822"));
+        listStock.add(new Gestionstock("909028", 16, "26-04-2020", "Ajout", "55513", "888842"));
+        listStock.add(new Gestionstock("909032", 12, "07-06-2020", "Retrait", "55523", "888863"));
+        listStock.add(new Gestionstock("909055", 25, "14-02-2020", "Retrait", "55536", "888822"));
         
-        listStock.add(new GestionStock("909013", 04, "05-02-2020", "Ajout", "55519", "888856"));
-        listStock.add(new GestionStock("909026", 11, "30-03-2020", "Retrait", "55508", "888846"));
-        listStock.add(new GestionStock("909054", 36, "09-05-2020", "Ajout", "55545", "888845"));
+        listStock.add(new Gestionstock("909013", 04, "05-02-2020", "Ajout", "55519", "888856"));
+        listStock.add(new Gestionstock("909026", 11, "30-03-2020", "Retrait", "55508", "888846"));
+        listStock.add(new Gestionstock("909054", 36, "09-05-2020", "Ajout", "55545", "888845"));
         
-        listStock.add(new GestionStock("909008", 24, "01-05-2020", "Ajout", "55532", "888864"));
-        listStock.add(new GestionStock("909033", 27, "21-01-2020", "Retrait", "55514", "888807"));
-        listStock.add(new GestionStock("909005", 10, "15-04-2020", "Retrait", "55520", "888825"));
+        listStock.add(new Gestionstock("909008", 24, "01-05-2020", "Ajout", "55532", "888864"));
+        listStock.add(new Gestionstock("909033", 27, "21-01-2020", "Retrait", "55514", "888807"));
+        listStock.add(new Gestionstock("909005", 10, "15-04-2020", "Retrait", "55520", "888825"));
         /*fournisseursUtils.list().forEach((e)->{
             listSuppliers.add(e);
         });*/
@@ -283,22 +293,22 @@ public class StockController implements Initializable {
                 switch(i)
                 {
                     case 0:
-                        if(person.getCodeStock().toLowerCase().contains(lowerCaseFilter)) return true;
+                        if(person.getIdStock().toLowerCase().contains(lowerCaseFilter)) return true;
                         break;
                     case 1:
-                        if(String.valueOf(person.getQte()).toLowerCase().contains(lowerCaseFilter)) return true;
+                        if(person.getQte().toLowerCase().contains(lowerCaseFilter)) return true;
                         break;
                     case 2:
-                        if(person.getDate().toLowerCase().contains(lowerCaseFilter)) return true;
+                        if(person.getDateStock().toLowerCase().contains(lowerCaseFilter)) return true;
                         break;
                     case 3:
-                        if(String.valueOf(person.getOperation()).toLowerCase().contains(lowerCaseFilter)) return true;
+                        if(person.getOperation().toLowerCase().contains(lowerCaseFilter)) return true;
                         break;
                     case 4:
-                        if(String.valueOf(person.getGestionnaire()).toLowerCase().contains(lowerCaseFilter)) return true;
+                        if(person.getIdGest().toLowerCase().contains(lowerCaseFilter)) return true;
                         break;
                     case 5:
-                        if(person.getProduit().toLowerCase().contains(lowerCaseFilter)) return true;
+                        if(person.getCodePro().toLowerCase().contains(lowerCaseFilter)) return true;
                         break;
                     default:
                         break;
@@ -325,8 +335,8 @@ public class StockController implements Initializable {
         searchColumn.getItems().addAll("CodeStock",  "Quanttité",
                                                 "Date",
                                                 "Opération",
-                                                "Employé",
-                                                "Produit");
+                                                titres.getString("MANAGER"),
+                                                titres.getString("PRODUITS"));
         searchColumn.setValue("CodeStock");
         initSearchPane();
         searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -365,9 +375,6 @@ public class StockController implements Initializable {
         });            
    }
 
-    @FXML
-    private void print(ActionEvent event) {
-    }
 
     @FXML
     private void tableViewClicked(MouseEvent event) {
@@ -414,5 +421,9 @@ public class StockController implements Initializable {
         caissier.setText(titres.getString("CAISSIER"));
         stats.setText(titres.getString("STATS"));
         factures.setText(titres.getString("FACTURES"));*/
+    }
+
+    @FXML
+    private void apercu(ActionEvent event) {
     }
 }

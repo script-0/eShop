@@ -16,8 +16,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -30,12 +28,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "gestionstock")
 @XmlRootElement
-@NamedQueries({
+/*@NamedQueries({
     @NamedQuery(name = "Gestionstock.findAll", query = "SELECT g FROM Gestionstock g")
     , @NamedQuery(name = "Gestionstock.findByIdStock", query = "SELECT g FROM Gestionstock g WHERE g.idStock = :idStock")
     , @NamedQuery(name = "Gestionstock.findByQte", query = "SELECT g FROM Gestionstock g WHERE g.qte = :qte")
     , @NamedQuery(name = "Gestionstock.findByDateStock", query = "SELECT g FROM Gestionstock g WHERE g.dateStock = :dateStock")
-    , @NamedQuery(name = "Gestionstock.findByOperation", query = "SELECT g FROM Gestionstock g WHERE g.operation = :operation")})
+    , @NamedQuery(name = "Gestionstock.findByOperation", query = "SELECT g FROM Gestionstock g WHERE g.operation = :operation")})*/
 public class Gestionstock implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -73,51 +71,52 @@ public class Gestionstock implements Serializable {
         this.idStock = idStock;
         this.qte = qte;
         this.dateStock = dateStock;
-        this.operation = operation;
+        this.operation = operation;     // Retrait: 0       Ajout:1
     }
 
-    public Integer getIdStock() {
-        return idStock;
+    public String getIdStock() {
+        return idStock.toString().substring(0, 3) + "-" + idStock.toString().substring(3, 6);
     }
 
     public void setIdStock(Integer idStock) {
         this.idStock = idStock;
     }
 
-    public BigDecimal getQte() {
-        return qte;
+    public String getQte() {
+        return qte.toString();
     }
 
     public void setQte(BigDecimal qte) {
         this.qte = qte;
     }
 
-    public Date getDateStock() {
-        return dateStock;
+    public String getDateStock() {
+        return dateStock.toGMTString();
     }
 
     public void setDateStock(Date dateStock) {
         this.dateStock = dateStock;
     }
 
-    public boolean getOperation() {
-        return operation;
+    public String getOperation() {
+        return (operation)?"Ajout":"Retrait";
     }
 
     public void setOperation(boolean operation) {
         this.operation = operation;
     }
 
-    public Gestionnaire getIdGest() {
-        return idGest;
+    public String getIdGest() {
+        return idGest.getMatricule();
     }
 
     public void setIdGest(Gestionnaire idGest) {
         this.idGest = idGest;
     }
 
-    public Produit getCodePro() {
-        return codePro;
+    public String getCodePro() {
+        String code = codePro.getCodePro().toString();
+        return code.substring(0, 3) + "-" + code.substring(3, 6);
     }
 
     public void setCodePro(Produit codePro) {

@@ -101,9 +101,9 @@
                </effect>
             </Label>
             <Separator layoutX="55.0" layoutY="87.0" opacity="0.45" prefHeight="0.0" prefWidth="174.0" />
-            <Label fx:id="slogan" layoutX="108.0" layoutY="84.0" styleClass="slogan" text="\${Slogan Here}" textFill="WHITE">
+            <Label fx:id="slogan" alignment="CENTER_RIGHT" layoutX="10.0" layoutY="84.0" text="\\${Slogan Here}" textFill="WHITE">
                <font>
-                  <Font size="19.0" />
+                  <Font name="Lucida Handwriting Italic" size="19.0" />
                </font>
             </Label>
          </children>
@@ -165,7 +165,7 @@
                   </ImageView>
                </graphic>
             </JFXButton>
-            <JFXButton fx:id="employe" layoutX="10.0" layoutY="10.0" ripplerFill="#2196f3" styleClass="bSelected" text="Employés">
+            <JFXButton fx:id="gestionnaire" layoutX="10.0" layoutY="10.0" ripplerFill="#2196f3" styleClass="bSelected" text="Gestionnaires">
                <font>
                   <Font size="15.0" />
                </font>

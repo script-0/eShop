@@ -10,6 +10,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXToggleButton;
+import dao.EntitiesImpl.GestionnaireImpl;
 import entity.Gestionnaire;
 import java.net.URL;
 import java.time.LocalDate;
@@ -85,6 +86,10 @@ public class EditGestionnaireController implements Initializable {
     private Label apercuLogin;
     @FXML
     private JFXToggleButton actif;
+    
+    GestionnaireImpl impl = new GestionnaireImpl();
+    
+    private static Integer mat = 600010;
 
     /**
      * Initializes the controller class.
@@ -97,8 +102,8 @@ public class EditGestionnaireController implements Initializable {
             loadResource(newValue);
         });*/
         
+        matricule.setDisable(true);
         apercuNom.textProperty().bindBidirectional(nom.textProperty());
-        apercuMatricule.textProperty().bindBidirectional(matricule.textProperty());
         apercuContact.textProperty().bindBidirectional(contact.textProperty());
         apercuType.textProperty().bindBidirectional(type.valueProperty());
         apercuEmail.textProperty().bindBidirectional(email.textProperty());
@@ -123,8 +128,15 @@ public class EditGestionnaireController implements Initializable {
                                 contact.getText(),
                                 adresse.getText(),
                                 login.getText(),
-                                !actif.isDisable());
+                                actif.isSelected());
         //GestionnairesController.updateBD(p);
+        if(impl.loadOnBD(p)) {
+            if(index==-1) {
+                sortedData.add(p);
+                mat +=1;
+            }
+            else sortedData.set(index, p);
+        }
         close();
     }
 
@@ -146,31 +158,30 @@ public class EditGestionnaireController implements Initializable {
      public void loadData(int i){
         index = i;
         Gestionnaire p = sortedData.get(i);
-        matricule.setText(p.getMatricule());
+        matricule.setText(p.getidGest().toString());
         nom.setText(p.getNom());
         type.setValue(p.getType());
         email.setText(p.getEmail());
         contact.setText(p.getContact());
         adresse.setText(p.getAdresse());
         login.setText(p.getLogin());
-        actif.setDisable(!p.getActif());
+        actif.setSelected(p.getActif());
         
     }
     
     public void loadTypes(){
-        type.getItems().addAll("Magasinier","Caissier","Administrateur");
+        type.getItems().addAll("MAGASINIER","CAISSIER","ADMINISTRATEUR");
     }
     
     public void initType() {
-        type.getItems().addAll("Admin", "Magasinier", "Caissier");
-        type.setValue("Admin");
+        loadTypes();
+        type.setValue("ADMINISTRATEUR");
     }
     
     public void remplissage() {
         initType();
         valider.disableProperty().bind(
-            Bindings.isEmpty(matricule.textProperty())
-            .or(Bindings.isEmpty(nom.textProperty()))
+            Bindings.isEmpty(nom.textProperty())
             .or(Bindings.isEmpty(email.textProperty()))
             .or(Bindings.isEmpty(contact.textProperty()))
             .or(Bindings.isEmpty(adresse.textProperty()))
@@ -183,16 +194,14 @@ public class EditGestionnaireController implements Initializable {
         tmp.close();
     }
     
-  /**** UPDATE_MONTHE ******/  
-    
-    public void loadOnBD(Gestionnaire e) {
-        
-        /********************************/
-            // Mise à jour des éléments dans la BD
-        /********************************/
+    public void initMatricule() {
+        if(sortedData.isEmpty()) matricule.setText(mat.toString());
+        else {
+            String matPrec = sortedData.get(sortedData.size()-1).getMatricule();
+            Integer mat = Integer.parseInt(matPrec.substring(0, 3) + matPrec.substring(4, 7))+1;
+            matricule.setText(mat.toString());
+        }
+        apercuMatricule.setText(matricule.getText());
     }
     
-    public int getFormat() {
-        return Integer.parseInt(matricule.getText().substring(0, 3) + matricule.getText().substring(4, 7));
-    }
 }

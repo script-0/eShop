@@ -5,6 +5,7 @@
  */
 package magasinier.categorie;
 
+import entity.Categorie;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -41,7 +42,7 @@ public class CategorieController implements Initializable {
 
     CategoriesController parent;    
     
-    Categories data;
+    Categorie data;
     
     public void setParent(CategoriesController p){
         this.parent = p;
@@ -80,9 +81,9 @@ public class CategorieController implements Initializable {
     public void loadData(int i){
         if(parent.sortedData.size()>i){
             data = parent.sortedData.get(i);
-            this.nom.setText(data.getName());
+            this.nom.setText(data.getNomCat());
             this.code.setText(data.getCode());
-            listeProduits.getChildren().addAll(new Label(data.getProduits().get(0).getName()),new Label(data.getProduits().get(0).getName()));
+            //listeProduits.getChildren().addAll(new Label(data.getProduitList().get(0).getNomPro()),new Label(data.getProduitList().get(1).getNomPro()));
         }
     }
     

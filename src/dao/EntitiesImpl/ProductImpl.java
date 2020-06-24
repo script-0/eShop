@@ -10,7 +10,6 @@ import dao.IProduct;
 import entity.Categorie;
 import entity.Produit;
 
-import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -39,20 +38,21 @@ public class ProductImpl implements IProduct {
 
     @Override
     public boolean save(Produit produit) {
-
-        List<Produit> produits = em.createQuery("select p from Produit p where p.codePro=:code or p.nomPro=:nom").setParameter("code" , produit.getCodePro()).setParameter("nom" , produit.getNomPro()).getResultList();
-        if( !produits.isEmpty() ) return false ; // le produit existe dans la base de données
+        em.getTransaction().begin();
         em.persist(produit);
+        em.flush();
+        em.getTransaction().commit();
         return true; // le produit a ete ajoutee dans la base de donnee
     }
 
     @Override
     public boolean update(Produit produit) {
-        List<Produit> produits = em.createQuery("select p from Produit p where p.nomPro=:nom").setParameter("nom", produit.getNomPro()).getResultList();
-        if( !produits.isEmpty() ) return  false ;// le produit n'existe pas dans la BD ou le nouveau produit est a une propriete similaire a un un produit de la bd
+        em.getTransaction().begin();
         em.merge(produit);
+        em.flush();
+        em.getTransaction().commit();
         return true;
-    }
+    } 
 
     @Override
     public List<Produit> findProductByCategory(Categorie categorie) {
@@ -71,5 +71,32 @@ public class ProductImpl implements IProduct {
         }
         return productPerCategory ;
     }
+    
+    @Override
+    public int findMaxId(){
+        return ((int)em.createQuery("select max(p.codePro) from Produit p").getSingleResult() + 1);
+    }
+
+    @Override
+    public boolean delete(Produit produit) {
+        em.getTransaction().begin();
+        int result = em.createQuery("DELETE FROM Produit p WHERE p.codePro=:codePro").setParameter("codePro",produit.getCodePro()).executeUpdate();
+        em.flush();
+        em.getTransaction().commit();
+        
+        return (result>0);
+    }
+
+    @Override
+    public Produit findByCode(int code) {
+        try{
+            return (Produit) em.createQuery("select p from Produit p where p.codePro=:param").setParameter("param" , code).getSingleResult();
+        }catch(Exception e){
+            
+        }
+        return null;
+    }
+    
+    
     
 }

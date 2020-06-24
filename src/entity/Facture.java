@@ -7,7 +7,7 @@ package entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Collection;
+import java.util.List;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -74,7 +74,7 @@ public class Facture implements Serializable {
     @ManyToOne(optional = false)
     private Gestionnaire idCaissiere;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idFac")
-    private Collection<Lignefacture> lignefactureCollection;
+    private List<Lignefacture> lignefactureList;
 
     public Facture() {
     }
@@ -157,12 +157,12 @@ public class Facture implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Lignefacture> getLignefactureCollection() {
-        return lignefactureCollection;
+    public List<Lignefacture> getLignefactureList() {
+        return lignefactureList;
     }
 
-    public void setLignefactureCollection(Collection<Lignefacture> lignefactureCollection) {
-        this.lignefactureCollection = lignefactureCollection;
+    public void setLignefactureList(List<Lignefacture> lignefactureList) {
+        this.lignefactureList = lignefactureList;
     }
 
     @Override
@@ -188,6 +188,10 @@ public class Facture implements Serializable {
     @Override
     public String toString() {
         return "entity.Facture[ idFac=" + idFac + " ]";
+    }
+
+    public String getClientName() {
+        return idClient.getNom();
     }
     
 }

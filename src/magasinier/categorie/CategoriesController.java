@@ -13,8 +13,9 @@ import javafx.fxml.Initializable;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import Utils.ControllerUtils;
+import dao.EntitiesImpl.CategoryImpl;
+import entity.Categorie;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.InvalidationListener;
@@ -32,14 +33,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import login.LoginController;
 import magasinier.dashboard.DashboardController;
-import magasinier.produit.Produits;
 import magasinier.produit.ProduitsController;
 
 /**
@@ -57,10 +55,21 @@ public class CategoriesController implements Initializable {
 
     @FXML
     private Label slogan;
+    /**********************         *                     */
 
     @FXML
     private Label username;
 
+    @FXML
+    private Label nameProfil;
+
+    @FXML
+    private Label idProfil;
+
+    @FXML
+    private JFXButton showProfil;
+    
+    /*********************************************/
     @FXML
     private JFXButton dashboard;
 
@@ -150,48 +159,22 @@ public class CategoriesController implements Initializable {
          }*/
     }    
     
-    static ObservableList<Categories> listCategories = FXCollections.observableArrayList();
+    static ObservableList<Categorie> listCategorie;
     
-    public FilteredList<Categories> filteredData;
+    public FilteredList<Categorie> filteredData;
     
-    public SortedList<Categories> sortedData ;
+    public SortedList<Categorie> sortedData ;
     
-     /** Lire la BD et charger tous les Categories dans la tableView i.e. Les ajouter dans l'ObservableList listCategories*/
+    
+    CategoryImpl impl = new CategoryImpl();
+    
     public void loadCategoryData(){
         //Load Suppliers from Database
-        ArrayList<Produits> listP1 = new ArrayList();        
-        listP1.add(new Produits("001-0001","Broli-Spaghetti",1120,1100,1000,"Patte alimentaire (Sphatteti) Broli","f081","23-04-2020","Enabled","Agro Alimentaire"));
-        listP1.add(new Produits("001-0002","Riz Meme Casse",1120,1100,1000,"Riz parfume","0017","23-04-2020","Enabled","Agro Alimentaire"));
-        listP1.add(new Produits("001-0003","Mayo",1120,1100,1000,"Huile raffinee","0018","23-04-2020","Enabled","Agro Alimentaire"));
-        listP1.add(new Produits("001-0004","Farine",1120,1100,1000,"Farine de Ble","f081","23-04-2020","Enabled","Agro Alimentaire"));
-        listP1.add(new Produits("001-0005","Mambo",1120,1100,1000,"Barre de chocolat","f081","23-04-2020","Enabled","Agro Alimentaire"));
-        
-        listCategories.add(new Categories("Agro-Alimentaire","0001",listP1));
-        
-        listCategories.add(new Categories("Electro-Menager","0002",listP1));
-        
-        listCategories.add(new Categories("Apperitif","0003",listP1));
-        
-        listCategories.add(new Categories("Jus","0004",listP1));
-        
-        listCategories.add(new Categories("Bonbons","0005",listP1));
-        
-        listCategories.add(new Categories("Biscuits","0006",listP1));
-        
-        listCategories.add(new Categories("Ingredients","0007",listP1));
-        
-        listCategories.add(new Categories("Lait de Beaute","0008",listP1));
-        
-        listCategories.add(new Categories("Savons","0009",listP1));
-        
-        listCategories.add(new Categories("Produits Laitiers","00010",listP1));
-        
-        listCategories.add(new Categories("Wisky","00011",listP1));
-        
-        listCategories.add(new Categories("Dispositifs Informatiques","00012",listP1));
+        listCategorie = FXCollections.observableArrayList(impl.readCategory());
+       
        
         //Wrap the ObservableList in a FilteredList (initially display all data).
-        filteredData = new FilteredList<>(listCategories,p->true);
+        filteredData = new FilteredList<>(listCategorie,p->true);
         
         //Set the filter Predicate whenever the filter changes.
         searchTextField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
@@ -214,7 +197,7 @@ public class CategoriesController implements Initializable {
                         if(person.getCode().toLowerCase().contains(lowerCaseFilter)) return true;
                         break;
                     case 1:
-                        if(person.getName().toLowerCase().contains(lowerCaseFilter)) return true;
+                        if(person.getNomCat().toLowerCase().contains(lowerCaseFilter)) return true;
                         break;
                     default:
                         break;
@@ -243,7 +226,7 @@ public class CategoriesController implements Initializable {
              
              Pane pane = (StackPane)loader.load();
              EditProduitsController con = loader.getController();
-             con.setItems(listCategories);
+             con.setItems(listCategorie);
              if(p!=-1){
                  con.loadData(p);
              }else{
@@ -329,14 +312,11 @@ public class CategoriesController implements Initializable {
              Stage tmp = (Stage) lien.getScene().getWindow();
              FXMLLoader loader=new FXMLLoader(getClass().getResource(test?"/magasinier/dashboard/dashboard.fxml":"/login/login.fxml"));
             Scene newScene;
+            newScene =  new Scene(loader.load());
              if(test){
-                  AnchorPane root = (AnchorPane)loader.load();
-                  newScene =  new Scene(root);
                   DashboardController controller = loader.getController();
                  controller.loadResource(langue.getValue());
              }else{
-                BorderPane root = (BorderPane)loader.load();
-                newScene =  new Scene(root);
                 LoginController controller = loader.getController();
                 controller.loadResource(langue.getValue());
              }
@@ -389,7 +369,6 @@ public class CategoriesController implements Initializable {
         /* ******** A Completer *************/
         lien.setText(titres.getString("MAGASINIER"));
         lien1.setText(titres.getString("PRODUITS"));
-        username.setText(titres.getString("USER"));
         dashboard.setText(titres.getString("DASHBOARD"));
         produits.setText(titres.getString("PRODUITS"));
         categories.setText(titres.getString("CATEGORY"));
@@ -413,8 +392,8 @@ public class CategoriesController implements Initializable {
     /**
      * @param cat*
      * @param c*********************************************/
-    public void removeCategorie(Pane cat, Categories c){
-        listCategories.remove(c);
+    public void removeCategorie(Pane cat, Categorie c){
+        listCategorie.remove(c);
         initPagination();
     }    
     
@@ -426,6 +405,7 @@ public class CategoriesController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
+        ControllerUtils.setProfil( username,nameProfil,idProfil,showProfil);
         userPopup.setVisible(false);
         titres = Internationalization.initLanguage(langue);
         langue.valueProperty().addListener((observable, oldValue, newValue) -> {

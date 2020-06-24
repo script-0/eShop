@@ -14,12 +14,13 @@ import javafx.fxml.Initializable;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import Utils.ControllerUtils;
+import dao.EntitiesImpl.ProductImpl;
+import entity.Produit;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -28,6 +29,7 @@ import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Pagination;
@@ -37,8 +39,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -64,8 +64,21 @@ public class ProduitsController implements Initializable {
     @FXML
     private Label slogan;
 
+    /**********************         *                     */
+
     @FXML
     private Label username;
+
+    @FXML
+    private Label nameProfil;
+
+    @FXML
+    private Label idProfil;
+
+    @FXML
+    private JFXButton showProfil;
+    
+    /*********************************************/
 
     @FXML
     private JFXButton dashboard;
@@ -87,6 +100,8 @@ public class ProduitsController implements Initializable {
 
     @FXML
     private JFXButton modify; 
+    
+    ProductImpl proImpl = new ProductImpl();
     
     /************ Pagination ************/
     
@@ -121,7 +136,7 @@ public class ProduitsController implements Initializable {
         if(sortedData.size()>5*param) tableView.getItems().addAll(sortedData.subList(5*param, fin));
 
         return this.tableView;
-    });            
+    });
     }
     
     
@@ -185,7 +200,7 @@ public class ProduitsController implements Initializable {
     @FXML
     void delete() {
             
-         ObservableList<Produits> items = tableView.getSelectionModel().getSelectedItems();
+         ObservableList<Produit> items = tableView.getSelectionModel().getSelectedItems();
          if(items == null)
          {
              //message d'erreur "Pas d'elements selectionnes
@@ -193,11 +208,18 @@ public class ProduitsController implements Initializable {
               //**supprimer l'enregistrement selectionne
              //**Retirer a la tableView
              items.forEach((data) -> {
-                // fournisseursUtils.delete(data); //System.out.println("Deleting to DB Successfully");
-                tableView.getItems().remove(data);
-                listProduits.remove(data);
+                // fournisseursUtils.delete(data); //
+                if(proImpl.delete(data)){
+                    System.out.println("Deleted :" + data);
+                    Utils.ControllerUtils.showNotification("Eclipse Link - JPA[MySql Connection]","Deleting complete successfuly",false,Pos.BOTTOM_RIGHT,30);
+                    tableView.getItems().remove(data);
+                    listProduits.remove(data);
+                }else{
+                    System.out.println("Deleting failed :" + data);                    
+                    Utils.ControllerUtils.showNotification("Eclipse Link - JPA[MySql Connection]","Deleting failed",true,Pos.BOTTOM_RIGHT,30);
+                }
              });
-             initPagination();
+             pagination.setCurrentPageIndex(0);
          }
     }    
     /****************************** /*************************************/
@@ -210,6 +232,7 @@ public class ProduitsController implements Initializable {
     @FXML
     void modify() {
         launchEditProduit(listProduits.indexOf(tableView.getSelectionModel().getSelectedItem()) );
+        initPagination();
     }
     
     void afficher(){
@@ -240,34 +263,34 @@ public class ProduitsController implements Initializable {
     
     /* ***************************table view ****************/
     @FXML
-    private TableView<Produits> tableView;
+    private TableView<Produit> tableView;
 
     @FXML
-    private TableColumn<Produits, String> codeCol;
+    private TableColumn<Produit, String> codeCol;
 
     @FXML
-    private TableColumn<Produits, String> nomCol;
+    private TableColumn<Produit, String> nomCol;
 
     @FXML
-    private TableColumn<Produits, Double> prixCol;
+    private TableColumn<Produit, Double> prixCol;
 
     @FXML
-    private TableColumn<Produits, Double> qteCol;
+    private TableColumn<Produit, Double> qteCol;
 
     @FXML
-    private TableColumn<Produits, String> dateCol;
+    private TableColumn<Produit, String> dateCol;
 
     @FXML
-    private TableColumn<Produits, String> etatCol;
+    private TableColumn<Produit, String> etatCol;
 
     @FXML
-    private TableColumn<Produits, String> categorieCol;
+    private TableColumn<Produit, String> categorieCol;
     
-    static ObservableList<Produits> listProduits = FXCollections.observableArrayList();
+    static ObservableList<Produit> listProduits = FXCollections.observableArrayList();
     
-    FilteredList<Produits> filteredData;
+    FilteredList<Produit> filteredData;
     
-    SortedList<Produits> sortedData ;
+    SortedList<Produit> sortedData ;
     
     int selectedSearchColumn = 1;/* 1 => Code
                                     2 => Nom
@@ -286,11 +309,11 @@ public class ProduitsController implements Initializable {
         
 //name Column
         nomCol.setText(titres.getString("NAME"));
-        nomCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        nomCol.setCellValueFactory(new PropertyValueFactory<>("nomPro"));
         //address Column
         
        prixCol.setText(titres.getString("PRICE_VENTE"));
-        prixCol.setCellValueFactory(new PropertyValueFactory<>("prixV"));
+        prixCol.setCellValueFactory(new PropertyValueFactory<>("prixVente"));
         
         //tel Column
         
@@ -299,11 +322,11 @@ public class ProduitsController implements Initializable {
        
         //email column
         
-        dateCol.setText(titres.getString("DATE_INSERTION"));
+        dateCol.setText(titres.getString("DATE_PEREMPTION"));
         dateCol.setCellValueFactory(new PropertyValueFactory<>("date"));
 
         
-        etatCol.setText(titres.getString("STATE"));
+        etatCol.setText(titres.getString("FRACTION"));
         etatCol.setCellValueFactory(new PropertyValueFactory<>("etat"));    
  
         categorieCol.setCellValueFactory(new PropertyValueFactory<>("categorie"));
@@ -323,26 +346,15 @@ public class ProduitsController implements Initializable {
     
      /** Lire la BD et charger tous les fournisseurs dans la tableView i.e. Les ajouter dans l'ArrayList listSuppliers*/
     
-    ObservableList<Produits> elements = FXCollections.observableArrayList();
+    ObservableList<Produit> elements = FXCollections.observableArrayList();
+    ProductImpl productImpl = new ProductImpl();
     
     public void loadSuppliers(){
+        listProduits.clear();
+        elements.clear();
         //Load Suppliers from Database
+        listProduits.addAll(productImpl.readProduct());
         tableView.setItems(elements);
-/* 4 ******************** Lire les produits de la B.D.*/
-        listProduits.add(new Produits("P001","Broli-Spaghetti",1120,1100,1000,"Patte alimentaire (Sphatteti) Broli","f081","23-04-2020","Enabled","Agro Alimentaire"));
-        listProduits.add(new Produits("E018","Micro-Onde",101000,100000,50,"Micro onde","f011","20-03-2020","Enabled","Electro-Menager"));
-        listProduits.add(new Produits("C081","Carotina",2000,2200,80,"Lait de Toilette Carotina","f101","04-05-2020","Enabled","Cosmetique"));
-        
-        listProduits.add(new Produits("P001","Broli-Spaghetti",1120,1100,1000,"Patte alimentaire (Sphatteti) Broli","f081","23-04-2020","Enabled","Agro Alimentaire"));
-        listProduits.add(new Produits("E018","Micro-Onde",101000,100000,50,"Micro onde","f011","20-03-2020","Enabled","Electro-Menager"));
-        listProduits.add(new Produits("C081","Carotina",2000,2200,80,"Lait de Toilette Carotina","f101","04-05-2020","Enabled","Cosmetique"));
-        
-        listProduits.add(new Produits("P001","Broli-Spaghetti",1120,1100,1000,"Patte alimentaire (Sphatteti) Broli","f081","23-04-2020","Enabled","Agro Alimentaire"));
-        listProduits.add(new Produits("E018","Micro-Onde",101000,100000,50,"Micro onde","f011","20-03-2020","Enabled","Electro-Menager"));
-        listProduits.add(new Produits("C081","Carotina",2000,2200,80,"Lait de Toilette Carotina","f101","04-05-2020","Enabled","Cosmetique"));
-        /*fournisseursUtils.list().forEach((e)->{
-            listSuppliers.add(e);
-        });*/
         
         //Wrap the ObservableList in a FilteredList (initially display all data).
         filteredData = new FilteredList<>(listProduits,p->true);
@@ -368,16 +380,16 @@ public class ProduitsController implements Initializable {
                         if(person.getCode().toLowerCase().contains(lowerCaseFilter)) return true;
                         break;
                     case 1:
-                        if(person.getName().toLowerCase().contains(lowerCaseFilter)) return true;
+                        if(person.getNomPro().toLowerCase().contains(lowerCaseFilter)) return true;
                         break;
                     case 2:
-                        if(String.valueOf(person.getPrixV()).toLowerCase().contains(lowerCaseFilter)) return true;
+                        if(String.valueOf(person.getPrixVente()).toLowerCase().contains(lowerCaseFilter)) return true;
                         break;
                     case 3:
                         if(String.valueOf(person.getQte()).toLowerCase().contains(lowerCaseFilter)) return true;
                         break;
                     case 4:
-                        if(person.getDate().toLowerCase().contains(lowerCaseFilter)) return true;
+                        if(person.getDatePeremtion().toString().toLowerCase().contains(lowerCaseFilter)) return true;
                         break;
                     case 5:
                         if(person.getEtat().toLowerCase().contains(lowerCaseFilter)) return true;
@@ -399,12 +411,7 @@ public class ProduitsController implements Initializable {
         //Bind the SortedList comparator to the TableView comparator.
         sortedData.comparatorProperty().bind(tableView.comparatorProperty());
         
-        //Add sorted (and filtered) data to the table.
         initPagination();
-        
-        /*//Sauvegarde le plus grand Id pour les ajouts futurs
-        maxId = listSuppliers.get(listSuppliers.size()-1).getId();*/
-        
     }
     
     void launchEditProduit(int p){
@@ -464,8 +471,8 @@ public class ProduitsController implements Initializable {
         searchColumn.getItems().addAll("Code",  titres.getString("NAME"),
                                                 titres.getString("PRICE_VENTE"),
                                                 titres.getString("QUANTITY"),
-                                                titres.getString("DATE_INSERTION"),
-                                                titres.getString("STATE"),
+                                                titres.getString("DATE_PEREMPTION"),
+                                                titres.getString("FRACTION"),
                                                 titres.getString("CATEGORY"));
         searchColumn.setValue("Code");
         initSearchPane();
@@ -515,14 +522,11 @@ public class ProduitsController implements Initializable {
              Stage tmp = (Stage) lien.getScene().getWindow();
              FXMLLoader loader=new FXMLLoader(getClass().getResource(test?"/magasinier/dashboard/dashboard.fxml":"/login/login.fxml"));
             Scene newScene;
+            newScene =  new Scene(loader.load());
              if(test){
-                  AnchorPane root = (AnchorPane)loader.load();
-                  newScene =  new Scene(root);
                   DashboardController controller = loader.getController();
                  controller.loadResource(langue.getValue());
              }else{
-                BorderPane root = (BorderPane)loader.load();
-                newScene =  new Scene(root);
                 LoginController controller = loader.getController();
                 controller.loadResource(langue.getValue());
              }
@@ -542,7 +546,8 @@ public class ProduitsController implements Initializable {
 
     @FXML
     void refresh() {
-        initPagination();
+        loadSuppliers();
+        pagination.setCurrentPageIndex(0);
     }
 
     /********** Gestion de la langue *************/
@@ -561,7 +566,6 @@ public class ProduitsController implements Initializable {
         /* ******** A Completer *************/
         lien.setText(titres.getString("MAGASINIER"));
         lien1.setText(titres.getString("PRODUITS"));
-        username.setText(titres.getString("USER"));
         dashboard.setText(titres.getString("DASHBOARD"));
         produits.setText(titres.getString("PRODUITS"));
         categories.setText(titres.getString("CATEGORY"));
@@ -582,9 +586,9 @@ public class ProduitsController implements Initializable {
         
         qteCol.setText(titres.getString("QUANTITY"));
         
-        dateCol.setText(titres.getString("DATE_INSERTION"));
+        dateCol.setText(titres.getString("DATE_PEREMPTION"));
         
-        etatCol.setText(titres.getString("STATE"));
+        etatCol.setText(titres.getString("FRACTION"));
         
         categorieCol.setText(titres.getString("CATEGORY"));        
         
@@ -595,8 +599,8 @@ public class ProduitsController implements Initializable {
         searchColumn.getItems().addAll("Code",  titres.getString("NAME"),
                                                 titres.getString("PRICE_VENTE"),
                                                 titres.getString("QUANTITY"),
-                                                titres.getString("DATE_INSERTION"),
-                                                titres.getString("STATE"),
+                                                titres.getString("DATE_PEREMPTION"),
+                                                titres.getString("FRACTION"),
                                                 titres.getString("CATEGORY"));
         searchColumn.setValue(searchColumn.getItems().get(i));        
     }
@@ -612,7 +616,8 @@ public class ProduitsController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         popup.setVisible(false);
         userPopup.setVisible(false);
-        titres = Internationalization.initLanguage(langue);
+        titres = Internationalization.initLanguage(langue);        
+        ControllerUtils.setProfil( username,nameProfil,idProfil,showProfil);
         langue.valueProperty().addListener((observable, oldValue, newValue) -> {
             loadResource(newValue);
         });

@@ -22,6 +22,8 @@ public interface IProduct {
     public List<String> findProductCode();
     public boolean save(Produit produit);
     public boolean update(Produit produit);
+    public boolean delete(Produit produit);
     public List<Produit> findProductByCategory(Categorie categorie);
-    
+    public int findMaxId();
+    public Produit findByCode(int code);
 }

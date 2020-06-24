@@ -6,7 +6,7 @@
 package entity;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 /*@NamedQueries({
     @NamedQuery(name = "Gestionnaire.findAll", query = "SELECT e FROM Gestionnaire e")
-    , @NamedQuery(name = "Gestionnaire.findByIdGest", query = "SELECT e FROM Gestionnaire e WHERE e.idGest = :idGest")
+    , @NamedQuery(name = "Gestionnaire.findByidGest", query = "SELECT e FROM Gestionnaire e WHERE e.idGest = :idGest")
     , @NamedQuery(name = "Gestionnaire.findByNomGest", query = "SELECT e FROM Gestionnaire e WHERE e.nomGest = :nomGest")
     , @NamedQuery(name = "Gestionnaire.findByTypeGest", query = "SELECT e FROM Gestionnaire e WHERE e.typeGest = :typeGest")
     , @NamedQuery(name = "Gestionnaire.findByEmail", query = "SELECT e FROM Gestionnaire e WHERE e.email = :email")
@@ -47,7 +47,7 @@ public class Gestionnaire implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "idGest")
-    private Integer IdGest;
+    private Integer idGest;
     @Transient
     private String matricule;
     @Basic(optional = false)
@@ -77,19 +77,19 @@ public class Gestionnaire implements Serializable {
     @Transient
     private String printActif;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idCaissiere")
-    private Collection<Facture> factureCollection;
+    private List<Facture> factureList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idGest")
-    private Collection<Gestionstock> gestionstockCollection;
+    private List<Gestionstock> gestionstockList;
 
     public Gestionnaire() {
     }
 
     public Gestionnaire(Integer idGest) {
-        this.IdGest = idGest;
+        this.idGest = idGest;
     }
 
     public Gestionnaire(Integer idGest, String nomGest, String typeGest, String email, String contact, String adresse, String login, boolean actif) {
-        this.IdGest = idGest;
+        this.idGest = idGest;
         this.matricule = idGest.toString().substring(0, 3) + "-" + idGest.toString().substring(3, 6);
         this.nom = nomGest;
         this.type = typeGest;
@@ -97,13 +97,13 @@ public class Gestionnaire implements Serializable {
         this.contact = contact;
         this.adresse = adresse;
         this.login = login;
-        this.password = IdGest.toString().substring(IdGest.toString().length()-2, IdGest.toString().length()) + nom.substring(0, 2) + type.substring(0, 2);
+        this.password = idGest.toString().substring(idGest.toString().length()-2, idGest.toString().length()) + nom.substring(0, 2) + type.substring(0, 2);
         this.actif = actif;
         printActif = (actif) ? "Oui" : "Non";
     }
 
-    public Integer getIdGest() {
-        return IdGest;
+    public Integer getidGest() {
+        return idGest;
     }
 
     public boolean isActif() {
@@ -111,11 +111,11 @@ public class Gestionnaire implements Serializable {
     }
 
     public String getMatricule() {
-       return IdGest.toString().substring(0, 3) + "-" + IdGest.toString().substring(3, 6);
+       return idGest.toString().substring(0, 3) + "-" + idGest.toString().substring(3, 6);
     }
 
-    public void setIdGest(Integer idGest) {
-        this.IdGest = idGest;
+    public void setidGest(Integer idGest) {
+        this.idGest = idGest;
         this.matricule = idGest.toString().substring(0, 3) + "-" + idGest.toString().substring(3, 6);
     }
 
@@ -185,31 +185,31 @@ public class Gestionnaire implements Serializable {
     }
 
     public String getPrintActif() {
-        return printActif;
+        return (actif) ? "Oui" : "Non";
     }
 
     @XmlTransient
-    public Collection<Facture> getFactureCollection() {
-        return factureCollection;
+    public List<Facture> getFactureList() {
+        return factureList;
     }
 
-    public void setFactureCollection(Collection<Facture> factureCollection) {
-        this.factureCollection = factureCollection;
+    public void setFactureList(List<Facture> factureList) {
+        this.factureList = factureList;
     }
 
     @XmlTransient
-    public Collection<Gestionstock> getGestionstockCollection() {
-        return gestionstockCollection;
+    public List<Gestionstock> getGestionstockList() {
+        return gestionstockList;
     }
 
-    public void setGestionstockCollection(Collection<Gestionstock> gestionstockCollection) {
-        this.gestionstockCollection = gestionstockCollection;
+    public void setGestionstockList(List<Gestionstock> gestionstockList) {
+        this.gestionstockList = gestionstockList;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (IdGest != null ? IdGest.hashCode() : 0);
+        hash += (idGest != null ? idGest.hashCode() : 0);
         return hash;
     }
 
@@ -220,7 +220,7 @@ public class Gestionnaire implements Serializable {
             return false;
         }
         Gestionnaire other = (Gestionnaire) object;
-        if ((this.IdGest == null && other.IdGest != null) || (this.IdGest != null && !this.IdGest.equals(other.IdGest))) {
+        if ((this.idGest == null && other.idGest != null) || (this.idGest != null && !this.idGest.equals(other.idGest))) {
             return false;
         }
         return true;
@@ -228,7 +228,7 @@ public class Gestionnaire implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Gestionnaire[ idGest=" + IdGest + " ]";
+        return "entity.Gestionnaire[ idGest=" + idGest + " ]";
     }
     
 }

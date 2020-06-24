@@ -26,7 +26,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Pagination;
-import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -177,7 +176,7 @@ public class FacturesController implements Initializable {
     private void loadGestionnaires(ActionEvent event) {
         try {
              Stage tmp = (Stage)lien.getScene().getWindow();
-             FXMLLoader loader=new FXMLLoader(getClass().getResource("/admin/employes.fxml"));
+             FXMLLoader loader=new FXMLLoader(getClass().getResource("/admin/gestionnaire.fxml"));
              Scene newScene = new Scene(loader.load());
              GestionnairesController controller = loader.getController();
              controller.loadResource(langue.getValue());

@@ -3,26 +3,45 @@ package dao.EntitiesImpl;
 import SingletonConnection.SingletonConnection;
 import dao.IGestionnaire;
 import entity.Gestionnaire;
-
 import javax.persistence.EntityManager;
 import java.util.List;
+import javax.persistence.NoResultException;
 
 public class GestionnaireImpl implements IGestionnaire {
     EntityManager em = SingletonConnection.getConnection();
     @Override
-    public void loadOnBD(Gestionnaire gestionnaire) {
-        List<Gestionnaire> gestionnaires = (List<Gestionnaire>) em.createQuery("select g from Gestionnaire g where g.nomGest=:nom or g.email=:email or g.contact=:contact or g.login=:login").setParameter("nom", gestionnaire.getNom()).setParameter("email" ,gestionnaire.getEmail()).setParameter("contact" ,gestionnaire.getContact()).setParameter("login" , gestionnaire.getLogin());
-        if( gestionnaires.isEmpty() && em.find(Gestionnaire.class , gestionnaire.getIdGest())!=null ) em.merge(gestionnaire);
+    public boolean loadOnBD(Gestionnaire gestionnaire) {
+           em.getTransaction().begin();
+           boolean flag = em.merge(gestionnaire)!=null;
+           em.getTransaction().commit();
+           return flag;
     }
 
     @Override
-    public void deleteFromBD(List<Gestionnaire> gestionnaires) {
+    public boolean deleteFromBD(List<Gestionnaire> gestionnaires) {
         for (Gestionnaire gestionnaire : gestionnaires){
-            if( em.find(Gestionnaire.class , gestionnaire.getIdGest())!=null )
+            if( em.find(Gestionnaire.class , gestionnaire.getidGest())!=null ) {
+                em.getTransaction().begin();
                 em.remove(gestionnaire);
+                em.getTransaction().commit();
+            }
+            else {
+                System.out.println("Erreur Suppression");
+                return false;
+            }
         }
+        return true;
     }
     
+    @Override
+    public Gestionnaire findGestionnaire(String nom) {
+        try{
+            return (Gestionnaire) em.createQuery("select g from Gestionnaire g where g.login=:nom").setParameter("nom" , nom ).getSingleResult();
+        }catch(NoResultException e){
+            Utils.ControllerUtils.print(" No Gestionnaire Found");
+        }
+        return null;
+    }
 
     @Override
     public List<Gestionnaire> readFromBD() {

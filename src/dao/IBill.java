@@ -17,5 +17,7 @@ import java.util.List;
  */
 public interface IBill {
     public List<Facture> readBillPerDate(Date date) ;
+ 
+    public boolean saveFacture(Facture f);
     
 }

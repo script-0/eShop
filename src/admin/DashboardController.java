@@ -17,7 +17,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import login.LoginController;
 
@@ -49,14 +51,20 @@ public class DashboardController implements Initializable{
     
     @FXML
     private JFXComboBox<String> langue;
-
-    ResourceBundle titres;
     @FXML
     private Label lien1;
     @FXML
-    private Label employes;
-    @FXML
     private Label stock;
+    @FXML
+    private Pane suppliers;
+    @FXML
+    private Pane statistiques;
+    @FXML
+    private ImageView exit;
+
+    ResourceBundle titres;
+    @FXML
+    private Label gestionnaires;
     
     public void loadResource(String language){
        titres =Internationalization.getBundle(language);
@@ -73,7 +81,7 @@ public class DashboardController implements Initializable{
         //caissier.setText(titres.getString("CAISSIER"));
         //stats.setText(titres.getString("STATS"));
         factures.setText(titres.getString("FACTURES"));
-        employes.setText(titres.getString("EMPLOYES"));
+        gestionnaires.setText(titres.getString("MANAGER"));
     }
     
     @FXML
@@ -105,7 +113,7 @@ public class DashboardController implements Initializable{
     private void loadGestionnaires() {
         try {
              Stage tmp = (Stage)lien.getScene().getWindow();
-             FXMLLoader loader=new FXMLLoader(getClass().getResource("/admin/employes.fxml"));
+             FXMLLoader loader=new FXMLLoader(getClass().getResource("/admin/gestionnaire.fxml"));
              Scene newScene = new Scene(loader.load());
              GestionnairesController controller = loader.getController();
              controller.loadResource(langue.getValue());
@@ -113,7 +121,7 @@ public class DashboardController implements Initializable{
              tmp.setScene(newScene);
              tmp.show();
          } catch (IOException ex) {
-             Logger.getLogger(DashboardController.class.getName()).log(Level.SEVERE, null, ex);
+             Logger.getLogger(GestionnairesController.class.getName()).log(Level.SEVERE, null, ex);
          }
     }
 
@@ -147,5 +155,13 @@ public class DashboardController implements Initializable{
          } catch (IOException ex) {
              Logger.getLogger(DashboardController.class.getName()).log(Level.SEVERE, null, ex);
          }
+    }
+
+    @FXML
+    private void loadSuppliers(MouseEvent event) {
+    }
+
+    @FXML
+    private void loadStats(MouseEvent event) {
     }
 }

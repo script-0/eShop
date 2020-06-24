@@ -6,7 +6,8 @@ import java.util.List;
 
 public interface IGestionnaire {
 
-    public void loadOnBD(Gestionnaire gestionnaire);
-    public void deleteFromBD(List<Gestionnaire> gestionnaires);
-    public List<Gestionnaire> readFromBD();
+    public boolean loadOnBD(Gestionnaire gestionnaire);
+    public boolean deleteFromBD(List<Gestionnaire> gestionnaires);
+    public List<Gestionnaire> readFromBD();    
+    public Gestionnaire findGestionnaire(String nom);
 }

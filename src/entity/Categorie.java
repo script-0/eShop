@@ -6,7 +6,7 @@
 package entity;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Stephen
+ * @author Isaac
  */
 @Entity
 @Table(name = "categorie")
@@ -44,7 +44,7 @@ public class Categorie implements Serializable {
     @Column(name = "nomCat")
     private String nomCat;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "categorieidCat")
-    private Collection<Produit> produitCollection;
+    private List<Produit> produitList;
 
     public Categorie() {
     }
@@ -62,6 +62,10 @@ public class Categorie implements Serializable {
         return idCat;
     }
 
+    public String getCode(){
+        return idCat.toString().substring(0, 3) + "-" + idCat.toString().substring(3, 6);
+    }
+    
     public void setIdCat(Integer idCat) {
         this.idCat = idCat;
     }
@@ -75,12 +79,12 @@ public class Categorie implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Produit> getProduitCollection() {
-        return produitCollection;
+    public List<Produit> getProduitList() {
+        return produitList;
     }
 
-    public void setProduitCollection(Collection<Produit> produitCollection) {
-        this.produitCollection = produitCollection;
+    public void setProduitList(List<Produit> produitList) {
+        this.produitList = produitList;
     }
 
     @Override
@@ -106,6 +110,10 @@ public class Categorie implements Serializable {
     @Override
     public String toString() {
         return "entity.Categorie[ idCat=" + idCat + " ]";
+    }
+
+    public String getDesc(Categorie cat) {
+        return "Description de la categorie";
     }
     
 }

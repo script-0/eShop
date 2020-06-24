@@ -5,30 +5,26 @@
  */
 package magasinier.categorie;
 
-import Utils.ControllerUtils;
 import com.jfoenix.controls.JFXButton;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import entity.Categorie;
+import entity.Produit;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Pagination;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import login.LoginController;
-import magasinier.produit.EditProduitsController;
-import magasinier.produit.ProduitsController;
 
 /**
  * FXML Controller class
@@ -64,17 +60,17 @@ public class ViewCategoriesController implements Initializable {
     @FXML
     private JFXButton add;
     
-    Categories data;
+    Categorie data;
 
-    public void loadData(Categories c){
+    public void loadData(Categorie c){
         data = c;
-        nom.setText(data.getName());
+        nom.setText(data.getNomCat());
         code.setText(data.getCode());
         initPagination();
     }
     
     public void initPagination(){
-        int tmp =  (int)Math.ceil(data.getProduits().size()/4.0);
+        int tmp =  (int)Math.ceil(data.getProduitList().size()/4.0);
         
         pagination.setPageCount(tmp);
         pagination.setCurrentPageIndex(0);
@@ -82,7 +78,7 @@ public class ViewCategoriesController implements Initializable {
         
         listProduits.getChildren().clear();
 
-        int f = data.getProduits().size();
+        int f = data.getProduitList().size();
         if(f >= 4 ) f = 4;
 
         for(int i=0;i<f;i++){
@@ -91,7 +87,7 @@ public class ViewCategoriesController implements Initializable {
         pagination.setPageFactory((param) -> {
             listProduits.getChildren().clear();
 
-            int fin =data.getProduits().size();
+            int fin =data.getProduitList().size();
             if(fin >=4*param+4) fin = 4*param+4;
 
             for(int i=4*param;i<fin;i++){
@@ -106,7 +102,7 @@ public class ViewCategoriesController implements Initializable {
              FXMLLoader loader=new FXMLLoader(getClass().getResource("/magasinier/categorie/elements.fxml"));
              HBox p = loader.load();
              ElementsController controller = loader.getController();  
-             controller.loadData(data.getProduits(),index,this);
+             controller.loadData(new ArrayList<>(data.getProduitList()),index,this);
              return p;
          } catch (IOException ex) {
              Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);

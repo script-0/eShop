@@ -5,27 +5,15 @@
  */
 package login;
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.stage.Stage;
 
 /**
  *
  * @author Isaac
  */
 public class CGUController implements Initializable{    
-    @FXML
-    private FontAwesomeIconView close;
-
-    @FXML
-    public void close() {
-        Stage tmp = (Stage)close.getScene().getWindow();
-        tmp.close();
-    }
-    
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         

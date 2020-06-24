@@ -133,7 +133,7 @@
             </Label>
          </children>
       </Pane>
-      <JFXComboBox fx:id="langue" layoutX="249.0" layoutY="29.0" prefHeight="31.0" prefWidth="121.0" promptText="Language" unFocusColor="WHITE" AnchorPane.leftAnchor="249.0" AnchorPane.topAnchor="29.0">
+      <JFXComboBox fx:id="langue" layoutX="235.0" layoutY="29.0" prefHeight="31.0" prefWidth="135.0" promptText="Language" unFocusColor="WHITE" AnchorPane.leftAnchor="235.0" AnchorPane.topAnchor="29.0">
          <opaqueInsets>
             <Insets />
          </opaqueInsets>
@@ -165,7 +165,7 @@
                   </ImageView>
                </graphic>
             </JFXButton>
-            <JFXButton fx:id="employes" layoutX="105.0" layoutY="10.0" onAction="#loadEmployes" ripplerFill="#2196f3" styleClass="b" text="Employés">
+            <JFXButton fx:id="gestionnaire" layoutX="105.0" layoutY="10.0" onAction="#loadGestionnaires" ripplerFill="#2196f3" styleClass="b" text="Gestionnaires">
                <font>
                   <Font size="15.0" />
                </font>
@@ -203,14 +203,14 @@
             </JFXButton>
          </children>
       </HBox>
-      <ImageView fitHeight="36.0" fitWidth="34.0" layoutX="380.0" layoutY="31.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="380.0" AnchorPane.topAnchor="31.0">
+      <ImageView fitHeight="36.0" fitWidth="34.0" layoutX="346.0" layoutY="30.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="346.0" AnchorPane.topAnchor="30.0">
          <image>
             <Image url="@../resources/img/translation.png" />
          </image>
       </ImageView>
       <Pane layoutX="32.0" layoutY="172.0" prefHeight="41.0" prefWidth="750.0" styleClass="paneDetails" AnchorPane.rightAnchor="11.0" AnchorPane.topAnchor="172.0" />
       <Pane layoutX="10.0" layoutY="172.0" prefHeight="39.0" prefWidth="343.0" styleClass="paneDetails" />
-      <JFXButton fx:id="refresh" layoutX="247.0" layoutY="175.0" onAction="#refresh" styleClass="b" text="Rafraichir" AnchorPane.rightAnchor="645.0" AnchorPane.topAnchor="175.0">
+      <JFXButton fx:id="refresh" layoutX="247.0" layoutY="175.0" onAction="#loadStockData" styleClass="b" text="Rafraichir" AnchorPane.rightAnchor="645.0" AnchorPane.topAnchor="175.0">
          <graphic>
             <ImageView fitHeight="22.0" fitWidth="29.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -222,7 +222,7 @@
             </ImageView>
          </graphic>
       </JFXButton>
-      <JFXButton fx:id="print" layoutX="368.0" layoutY="174.0" onAction="#print" styleClass="b" text="Aperçu" AnchorPane.rightAnchor="525.0" AnchorPane.topAnchor="174.0">
+      <JFXButton fx:id="apercu" layoutX="368.0" layoutY="174.0" onAction="#apercu" styleClass="b" text="Aperçu" AnchorPane.rightAnchor="525.0" AnchorPane.topAnchor="174.0">
          <graphic>
             <ImageView fitHeight="22.0" fitWidth="22.0" mouseTransparent="true" preserveRatio="true">
                <image>
@@ -252,10 +252,10 @@
       <TableView fx:id="tableView" layoutX="11.0" layoutY="226.0" onMouseClicked="#tableViewClicked" tableMenuButtonVisible="true" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="11.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="226.0">
          <columns>
             <TableColumn fx:id="codeStockCol" prefWidth="107.0" text="CodeStock" />
-            <TableColumn fx:id="quantiteCol" prefWidth="89.0" text="Quantité" />
+            <TableColumn fx:id="qteCol" prefWidth="89.0" text="Quantité" />
             <TableColumn fx:id="dateCol" prefWidth="131.0" text="Date" />
             <TableColumn fx:id="operationCol" prefWidth="66.0" text="Opération" />
-            <TableColumn fx:id="employeCol" prefWidth="86.0" text="Employé" />
+            <TableColumn fx:id="gestionnaireCol" prefWidth="86.0" text="Gestionnaire" />
             <TableColumn fx:id="produitCol" prefWidth="75.0" text="Produit" />
          </columns>
          <columnResizePolicy>

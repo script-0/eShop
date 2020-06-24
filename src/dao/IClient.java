@@ -19,4 +19,5 @@ public interface IClient {
     public void updateClient(long clientCode, Client newInfo) ;
     public void deleteClient(long clientCode);
     public List<Client> readClient() ;
+    public Client getClientById(int code);
 }

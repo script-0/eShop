@@ -111,7 +111,6 @@ public class ViewGestionnaireController implements Initializable {
              Logger.getLogger(EditGestionnaireController.class.getName()).log(Level.SEVERE, null, ex);
          }
         loadData(index);
-        GestionnairesController.listGestionnaires.set(tableViewPagination*5 + index, items.get(index));
     }
 
     
@@ -142,14 +141,14 @@ public class ViewGestionnaireController implements Initializable {
     public void loadData(int i){
         Gestionnaire e = items.get(i);
         nom.setText(e.getNom());
-        matricule.setText(e.getMatricule().toString());
+        matricule.setText(e.getMatricule());
         type.setText(e.getType());
         email.setText(e.getEmail());
         contact.setText(e.getContact());
         adresse.setText(e.getAdresse());
         login.setText(e.getLogin());
         password.setText(e.getPassword());
-        actif.setText(e.getActif()? "Actfi" : "Inactif");
+        actif.setText(e.getActif()? "Actif" : "Inactif");
     }
     
     public void setup(ObservableList<Gestionnaire> list, int selectedIndex, int page){

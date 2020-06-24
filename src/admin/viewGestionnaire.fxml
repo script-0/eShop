@@ -13,7 +13,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<Pane prefHeight="456.0" prefWidth="636.0" style="-fx-background-color: TRANSPARENT;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="admin.ViewEmployeController">
+<Pane prefHeight="456.0" prefWidth="636.0" style="-fx-background-color: TRANSPARENT;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="admin.ViewGestionnaireController">
    <children>
       <Pagination fx:id="pagination" currentPageIndex="2" layoutY="15.0" pageCount="20" prefHeight="441.0" prefWidth="636.0" style="-fx-background-color: white; -fx-background-radius: 1.3em 1.3em 0em 0em; -fx-border-color: #0b6f4f; -fx-border-radius: 1.2em 1.2em 0 0;" />
       <Pane fx:id="apercuPane" layoutX="8.0" layoutY="6.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="390.0" prefWidth="610.0" style="-fx-background-color: #ffffff; -fx-border-color: #00796b; -fx-border-width: 0 0 2px 0;" stylesheets="@../resources/style/editProduits.css">
@@ -80,7 +80,7 @@
                   <Image url="@../resources/img/user.png" />
                </image>
             </ImageView>
-            <JFXButton fx:id="modifier" layoutX="506.0" layoutY="352.0" onAction="#loadEditEmploye" prefHeight="33.0" prefWidth="100.0" styleClass="b" text="Modifier" />
+            <JFXButton fx:id="modifier" layoutX="506.0" layoutY="352.0" onAction="#loadEditGestionnaire" prefHeight="33.0" prefWidth="100.0" styleClass="b" text="Modifier" />
             <ImageView fitHeight="36.0" fitWidth="34.0" layoutX="146.0" layoutY="6.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../resources/img/language.png" />

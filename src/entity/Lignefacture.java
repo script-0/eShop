@@ -61,6 +61,10 @@ public class Lignefacture implements Serializable {
     public Lignefacture() {
     }
 
+    public String getCode(){
+       return codePro.getCode();
+    }
+    
     public Lignefacture(Integer idLFac) {
         this.idLFac = idLFac;
     }
@@ -84,6 +88,14 @@ public class Lignefacture implements Serializable {
         return prixVente;
     }
 
+    public double getPrixU(){
+        return prixVente.doubleValue();
+    }
+    
+    public double getPrixT(){
+        return prixVente.multiply(qte).doubleValue();
+    }
+    
     public void setPrixVente(BigDecimal prixVente) {
         this.prixVente = prixVente;
     }

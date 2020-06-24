@@ -5,8 +5,8 @@
  */
 package login;
 
+import static Utils.ControllerUtils.showNotification;
 import Utils.Internationalization;
-import magasinier.dashboard.DashboardController;
 import caissier.FacturationController;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
@@ -14,6 +14,8 @@ import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
+import dao.EntitiesImpl.GestionnaireImpl;
+import entity.Gestionnaire;
 import java.io.IOException;
 import java.net.URL;
 import javafx.event.ActionEvent;
@@ -23,9 +25,9 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 /**
@@ -60,46 +62,65 @@ public class LoginController implements Initializable {
     
     ResourceBundle titres;
 
+    GestionnaireImpl gestImpl = new GestionnaireImpl();
+    
+    public static Gestionnaire gestionnaire;
+    
     @FXML
     void logIn() {
-        boolean test = asAdmin.isSelected();
-        int i = (user.getText().equalsIgnoreCase("cassier"))?1:0;
-         try {
-             Stage tmp = (Stage)slogan.getScene().getWindow();
-             FXMLLoader loader=null;
-             if(test){
-                 loader = new FXMLLoader(getClass().getResource("/admin/dashboard.fxml"));
-             }else{
-                 loader = new FXMLLoader(getClass().getResource((i==0)?"/magasinier/dashboard/dashboard.fxml":"/caissier/facturation.fxml"));
-             }
-             Scene newScene = new Scene(loader.load());
-             if(test){
-                 admin.DashboardController controller= loader.getController();
-                 controller.loadResource(langue.getValue());
-             }else if(i==0){
-                 magasinier.dashboard.DashboardController controller = loader.getController();
-                 controller.loadResource(langue.getValue());
-             }else{
-                 FacturationController controller = loader.getController();
-                 controller.loadResource(langue.getValue());
-             }
-             
-             tmp.setScene(newScene);
-             
-             tmp.hide();
-             tmp.show();
-             tmp.setMaximized(true);
-            // tmp.sizeToScene();
-             //tmp.centerOnScreen();*/
-             //controllerUtils.launchTransition(newScene.getRoot());
-         } catch (IOException ex) {
-             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
-         }        
+        try{
+            gestionnaire = gestImpl.findGestionnaire(user.getText());
+            if(gestionnaire == null){
+                showNotification("Eclipse Link - JPA[Login]","No Users Found with username = "+user.getText(),true,Pos.BOTTOM_RIGHT,5);
+            }else if (gestionnaire.getPassword().equals(pass.getText())){
+                Stage tmp = (Stage)slogan.getScene().getWindow();
+                FXMLLoader loader=null;
+                Scene newScene = null;
+                if(asAdmin.isSelected()){
+                    if(gestionnaire.getType().equals("ADMINISTRATEUR")){
+                        loader = new FXMLLoader(getClass().getResource("/admin/dashboard.fxml"));
+                        newScene = new Scene(loader.load());
+                        admin.DashboardController controller= loader.getController();
+                        controller.loadResource(langue.getValue());
+                        tmp.setScene(newScene);             
+                        tmp.hide();
+                        tmp.show();
+                        tmp.setMaximized(true);
+                    }else{
+                        showNotification("Eclipse Link - JPA[Login Privilege]",gestionnaire.getLogin() +" vous n'avez pas les privileges pour vous connectez en tant Administrateur",true,Pos.BOTTOM_RIGHT,5);
+                    }
+                }else{
+                    if(gestionnaire.getType().equals("MAGASINIER")){
+                        loader = new FXMLLoader(getClass().getResource("/magasinier/categorie/categories.fxml"));
+                        newScene = new Scene(loader.load());
+                        magasinier.categorie.CategoriesController controller= loader.getController();
+                        controller.loadResource(langue.getValue());
+                        tmp.setScene(newScene);             
+                        tmp.hide();
+                        tmp.show();
+                        tmp.setMaximized(true);
+                    }else if (gestionnaire.getType().equals("CAISSIER")){
+                        loader = new FXMLLoader(getClass().getResource("/caissier/facturation.fxml"));
+                        newScene = new Scene(loader.load());
+                        FacturationController controller= loader.getController();
+                        controller.loadResource(langue.getValue());
+                        tmp.setScene(newScene);             
+                        tmp.hide();
+                        tmp.show();
+                        tmp.setMaximized(true);
+                    }
+                }
+            }else{
+                showNotification("Eshop [Login]","Username/Password is wrong.\n Verify your informations and try again",true,Pos.BOTTOM_RIGHT,5);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+        }        
     }
 
     @FXML
     void passwordForget(ActionEvent event) {
-        
+        showNotification("Eshop [Login]","Please contact an Administrator.",false,Pos.BOTTOM_RIGHT,5);
     }
     
     public void loadResource(String language){
@@ -117,6 +138,7 @@ public class LoginController implements Initializable {
         asAdmin.setText(titres.getString("LOGINASADMIN"));
         login.setText(titres.getString("LOG"));
         cgu.setText(titres.getString("CGU"));
+        showNotification("Eshop [Login]","Connection à la B.D. établie",false,Pos.BOTTOM_RIGHT,5);
     }    
     
     @FXML
@@ -144,6 +166,7 @@ public class LoginController implements Initializable {
         langue.valueProperty().addListener((observable, oldValue, newValue) -> {
             loadResource(newValue);
         });
+        gestionnaire = null;
     }
     
 }
